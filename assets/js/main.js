@@ -1,3 +1,4 @@
+/* eslint-disable import/newline-after-import */
 /*
  * Main Javascript file for data-healer.
  *
@@ -10,8 +11,9 @@ require('font-awesome-webpack');
 require('materialize-css');
 
 const Vue = require('vue');
-
+Vue.config.devtools = true;
 window.Vue = Vue;
 
 // Your own code
+require('./utils.js');
 require('./controller.js');

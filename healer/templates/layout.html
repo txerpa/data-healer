@@ -23,7 +23,7 @@
 
 </head>
 
-<body class="{% block body_class %}{% endblock %}">
+<body class="{% block body_class %}{% endblock %} blue-grey darken-1">
 {% block body %}
 
     <header>{% block header %}{% endblock %}</header>
@@ -54,7 +54,13 @@
     {% include "footer.html" %}
 
     {{ javascript_tag('main_js') | safe }}
-    {% block js %}{% endblock %}
+
+    {% block js %}
+        <script type="text/javascript">
+            controller.init("{{ input_file }}", "{{  input_separator }}", "{{ columns_to_show }}",
+                "{{ help_column }}", "{{ output_file }}", "{{ output_separator }}", "{{ inferred_column }}");
+        </script>
+    {% endblock %}
 
 {% endblock %}
 </body>
