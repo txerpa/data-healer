@@ -16,7 +16,7 @@ INPUT_FILE = 'data/input.csv'
 INPUT_SEPARATOR = ';'
 
 # Columns to show in the screen (information that the user needs to categorize the row)
-COLUMNS_TO_SHOW = ['original_messages',]
+COLUMNS_TO_SHOW = ['original_messages', ]
 
 # If this column is not None the category of this column will be used as a clue for the user
 # (this column could have been inferred by an unsupervised learning algorithm)

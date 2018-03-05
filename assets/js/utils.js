@@ -1,4 +1,5 @@
 /* eslint-disable no-extend-native,guard-for-in,func-names */
+
 /*
  * Util functions
  */
@@ -7,7 +8,7 @@ const utils = {
 
     /**
      * Function that preprocess a list serialized as a string
-     * @param str
+     * @param {str} str
      * @returns {array}
      */
     strToList(str) {
@@ -19,7 +20,7 @@ const utils = {
 
     /**
      * Function that cast a list into a string for show in the HTML
-     * @param list
+     * @param {array} list
      */
     listToStr(list) {
         return Array(list).join(', ');

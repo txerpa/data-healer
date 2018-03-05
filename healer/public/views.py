@@ -4,7 +4,7 @@
 Public section, including homepage and signup.
 """
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, jsonify
 
 import conf
 
@@ -26,7 +26,13 @@ def home():
     return render_template('home.html', **info)
 
 
-@blueprint.route('/about/')
+@blueprint.route('/about/', methods=['GET'])
 def about():
     """About page."""
     return render_template('about.html')
+
+
+@blueprint.route('/get_row/', methods=['GET'])
+def get_row():
+    """Get the next row of the dataset"""
+    return jsonify({'hola': 'adios'})
