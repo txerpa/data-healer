@@ -2,7 +2,7 @@
 Data healer
 ===============================
 
-A flasky app to categorize your unlabelled dataset.
+A flasky app to categorize a unlabelled dataset.
 
 
 Quickstart
@@ -13,31 +13,21 @@ add the following to ``.bashrc`` or ``.bash_profile``.
 
 .. code-block:: bash
 
-    export DATA-HEALER_SECRET='something-really-secret'
+    export DATA_HEALER_SECRET='something-really-secret'
 
 Run the following commands to bootstrap your environment ::
 
     git clone https://github.com/bertini36/data-healer
     cd data-healer
-    pip install -r requirements/dev.txt
+    pip install -r requirements.txt
     npm install
     npm start  # run the webpack dev server and flask server using concurrently
-
-You will see a pretty welcome screen.
 
 In general, before running shell commands, set the ``FLASK_APP`` and
 ``FLASK_DEBUG`` environment variables ::
 
     export FLASK_APP=healer_app.py
     export FLASK_DEBUG=1
-
-Once you have installed your DBMS, run the following to create your app's
-database tables and perform the initial migration ::
-
-    flask db init
-    flask db migrate
-    flask db upgrade
-    npm start
 
 
 Deployment
@@ -71,22 +61,6 @@ To run all tests, run ::
     flask test
 
 
-Migrations
-----------
-
-Whenever a database migration needs to be made. Run the following commands ::
-
-    flask db migrate
-
-This will generate a new migration script. Then run ::
-
-    flask db upgrade
-
-To apply the migration.
-
-For a full migration command reference, run ``flask db --help``.
-
-
 Asset Management
 ----------------
 
@@ -99,7 +73,7 @@ like
 ``static/build/img/favicon.fec40b1d14528bf9179da3b6b78079ad.ico``.
 You can then put this line into your header::
 
-    <link rel="shortcut icon" href="{{asset_url_for('img/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ asset_url_for('img/favicon.ico') }}">
 
 to refer to it inside your HTML page.  If all of your static files are
 managed this way, then their filenames will change whenever their

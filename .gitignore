@@ -48,3 +48,6 @@ docs/_build
 # webpack-built files
 /healer/static/build/
 /healer/webpack/manifest.json
+
+# Pycharm
+.idea/
