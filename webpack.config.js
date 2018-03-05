@@ -35,6 +35,9 @@ module.exports = {
     },
     resolve: {
         extensions: ['.js', '.jsx', '.css'],
+        alias: {
+            vue: 'vue/dist/vue.min.js',
+        }
     },
     devtool: 'source-map',
     devServer: {

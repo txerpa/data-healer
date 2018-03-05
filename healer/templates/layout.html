@@ -28,7 +28,7 @@
 
     <header>{% block header %}{% endblock %}</header>
 
-    <div class="{% block content_class %}container{% endblock content_class %}">
+    <div id="app" class="{% block content_class %}container{% endblock content_class %}">
 
         <div role="main">
             {% with messages = get_flashed_messages(with_categories=true) %}
