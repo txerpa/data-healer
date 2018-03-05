@@ -9,7 +9,8 @@ require('jquery');
 require('font-awesome-webpack');
 require('materialize-css');
 
-var Vue = require('vue');
+const Vue = require('vue');
+
 window.Vue = Vue;
 
 // Your own code

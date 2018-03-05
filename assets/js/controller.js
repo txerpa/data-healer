@@ -2,18 +2,14 @@
     Controller
 */
 
-var controller = new Vue({
-
+const controller = new Vue({
     el: '#app',
-
     data: {},
-
     computed: {},
-
     methods: {
-        init: function () {
-            console.log("Function init");
-        }
+        init() {
+            console.log('Function init');
+        },
     },
 
 });

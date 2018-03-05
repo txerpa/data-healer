@@ -12,10 +12,10 @@ blueprint = Blueprint('public', __name__, static_folder='../static')
 @blueprint.route('/', methods=['GET'])
 def home():
     """Home page."""
-    return render_template('public/home.html')
+    return render_template('home.html')
 
 
 @blueprint.route('/about/')
 def about():
     """About page."""
-    return render_template('public/about.html')
+    return render_template('about.html')

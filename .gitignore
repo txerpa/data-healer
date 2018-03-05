@@ -51,3 +51,7 @@ docs/_build
 
 # Pycharm
 .idea/
+
+# Data
+data/*
+!data/.gitkeep
