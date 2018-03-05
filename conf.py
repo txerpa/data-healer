@@ -5,12 +5,17 @@ Application configuration file
 In this file the user must specify some options for the automatization of the categorization task
 """
 
+import os
+
+ROOT_DIR = os.path.abspath(__file__).split('conf.py')[0]
+
+
 # ======================================================================================================================
 # Input configuration
 # ======================================================================================================================
 
 # Input dataset file
-INPUT_FILE = 'data/input.csv'
+INPUT_FILE = ROOT_DIR + 'data/N12022_D2018-02-26_preprocessed.csv'
 
 # Input CSV file row separator
 INPUT_SEPARATOR = ';'
@@ -28,10 +33,10 @@ HELP_COLUMN = None
 # ======================================================================================================================
 
 # Output dataset file
-OUTPUT_FILE = 'data/output.csv'
+OUTPUT_FILE = ROOT_DIR + 'data/output.csv'
 
 # Output CSV file row separator
 OUTPUT_SEPARATOR = ';'
 
 # Name of the column with the new categories
-INFERRED_COLUMN = 'category'
+INFERRED_COLUMN = 'inferred_category'

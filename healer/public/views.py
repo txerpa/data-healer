@@ -5,8 +5,10 @@ Public section, including homepage and signup.
 """
 
 from flask import Blueprint, render_template, jsonify
+import pandas as pd
 
 import conf
+from .utils import check_confs
 
 blueprint = Blueprint('public', __name__, static_folder='../static')
 
@@ -35,4 +37,5 @@ def about():
 @blueprint.route('/get_row/', methods=['GET'])
 def get_row():
     """Get the next row of the dataset"""
-    return jsonify({'hola': 'adios'})
+    errors = check_confs()
+    return jsonify({'errors': errors})
