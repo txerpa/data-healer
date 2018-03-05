@@ -4,7 +4,7 @@
 Public section, including homepage and signup.
 """
 
-from flask import Blueprint, render_template, jsonify
+from flask import Blueprint, render_template, jsonify, request
 import pandas as pd
 
 import conf
@@ -38,4 +38,11 @@ def about():
 def get_row():
     """Get the next row of the dataset"""
     errors = check_confs()
-    return jsonify({'errors': errors})
+    if len(errors) > 0:
+        return jsonify({'errors': errors})
+    df = pd.read_csv(conf.INPUT_FILE, sep=conf.INPUT_SEPARATOR, encoding='utf-8')
+    row = request.args.get('row', type=int)
+    if row > df.shape[0]:
+        return jsonify({'errors': ['row index ({}) is greater than dataframe shape'.format(row)]})
+    return jsonify({'row': {column: df.iloc[row][column] for column in conf.COLUMNS_TO_SHOW}})
+
