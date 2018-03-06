@@ -1,4 +1,4 @@
-/* eslint-disable no-extend-native,guard-for-in,func-names,no-plusplus,no-prototype-builtins,no-restricted-syntax */
+/* eslint-disable no-extend-native,guard-for-in,func-names,no-plusplus,no-prototype-builtins,no-restricted-syntax,no-undef */
 
 /*
  * Util functions
@@ -41,6 +41,32 @@ const utils = {
             arr = arr.slice(chunkSize);
         }
         return chunks;
+    },
+
+    /**
+     * Function that shows an error notification
+     * @param {str} text
+     */
+    showError(text) {
+        new Noty({
+            type: 'error',
+            layout: 'topRight',
+            theme: 'sunset',
+            text,
+        }).show();
+    },
+
+    /**
+     * Function that shows a success notification
+     * @param {str} text
+     */
+    showSuccess(text) {
+        new Noty({
+            type: 'success',
+            layout: 'topRight',
+            theme: 'sunset',
+            text,
+        }).show();
     },
 
 };

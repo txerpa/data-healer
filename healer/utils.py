@@ -19,7 +19,7 @@ def flash_errors(form, category='warning'):
             flash('{0} - {1}'.format(getattr(form, field).label.text, error), category)
 
 
-def check_confs():
+def verify_confs():
     """
     Function that checks the configuration specified by the user
     :return errors: {list}

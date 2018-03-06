@@ -10,7 +10,7 @@ from flask import Blueprint, render_template, jsonify, request, Response
 import pandas as pd
 
 import conf
-from ..utils import check_confs
+from ..utils import verify_confs
 
 blueprint = Blueprint('public', __name__, static_folder='../static')
 
@@ -36,6 +36,23 @@ def about():
     return render_template('about.html')
 
 
+@blueprint.route('/check_confs/', methods=['GET'])
+def check_confs():
+    """Funcion tha checks the configurations writed in conf.py by the user"""
+    errors = verify_confs()
+    return jsonify({'errors': errors})
+
+
+@blueprint.route('/get_row/', methods=['GET'])
+def get_row():
+    """Get the next row of the dataset"""
+    input_df = pd.read_csv(conf.INPUT_FILE, sep=conf.INPUT_SEPARATOR, encoding='utf-8')
+    row = request.args.get('row', type=int)
+    if row > input_df.shape[0]:
+        return jsonify({'errors': ['row index ({}) is greater than dataframe shape'.format(row)]})
+    return jsonify({'row': {column: input_df.iloc[row][column] for column in conf.COLUMNS_TO_SHOW}})
+
+
 @blueprint.route('/get_categories/', methods=['GET'])
 def get_categories():
     """Get the categories availables for categorize a row"""
@@ -46,19 +63,6 @@ def get_categories():
     else:
         categories = conf.CATEGORIES
     return jsonify({'categories': categories, 'total_rows': total_rows})
-
-
-@blueprint.route('/get_row/', methods=['GET'])
-def get_row():
-    """Get the next row of the dataset"""
-    errors = check_confs()
-    if len(errors) > 0:
-        return jsonify({'errors': errors})
-    input_df = pd.read_csv(conf.INPUT_FILE, sep=conf.INPUT_SEPARATOR, encoding='utf-8')
-    row = request.args.get('row', type=int)
-    if row > input_df.shape[0]:
-        return jsonify({'errors': ['row index ({}) is greater than dataframe shape'.format(row)]})
-    return jsonify({'row': {column: input_df.iloc[row][column] for column in conf.COLUMNS_TO_SHOW}})
 
 
 @blueprint.route('/post_row/', methods=['POST'])
@@ -75,9 +79,6 @@ def post_row():
         output_df = pd.DataFrame(columns=columns)
     row = {column: input_df.iloc[json['n_row']][column] for column in input_df.columns.tolist()}
     row[conf.INFERRED_COLUMN] = json['category']
-    print('COLUMNS')
-    print(columns)
-    print(len(columns))
     row = pd.DataFrame([row], columns=columns)
     output_df = output_df.append(row)
     output_df.to_csv(conf.OUTPUT_FILE, sep=conf.OUTPUT_SEPARATOR, encoding='utf-8', index=False)

@@ -23,8 +23,8 @@ module.exports = {
         main_js: './assets/js/main',
         main_css: [
             path.join(__dirname, 'node_modules', 'font-awesome', 'css', 'font-awesome.css'),
-            path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'css', 'bootstrap.css'),
             path.join(__dirname, 'node_modules', 'materialize-css', 'dist', 'css', 'materialize.css'),
+            path.join(__dirname, 'node_modules', 'noty', 'lib', 'noty.css'),
             path.join(__dirname, 'assets', 'css', 'style.css'),
         ],
     },

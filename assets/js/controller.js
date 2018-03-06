@@ -1,4 +1,4 @@
-/* eslint-disable camelcase,no-trailing-spaces,no-undef,no-prototype-builtins,no-restricted-syntax,no-plusplus,no-unused-vars */
+/* eslint-disable camelcase,no-trailing-spaces,no-undef,no-prototype-builtins,no-restricted-syntax,no-plusplus,no-unused-vars,guard-for-in,no-const-assign */
 
 /*
     Controller data-healer
@@ -85,37 +85,36 @@ const controller = new Vue({
         },
 
         /**
+         * Function that checks the configurations
+         */
+        check_confs() {
+            this.$http.get('/check_confs/').then((response) => {
+                if (response.body.errors.length === 0) {
+                    utils.showSuccess('Start!');
+                    $('#summary-card').css('display', 'none');
+                    $('#app-card').css('display', 'block');
+                    this.getRow();
+                    this.getCategories();
+                } else {
+                    for (let i = 0; i < response.body.errors.length; i++) {
+                        utils.showError(response.body.errors[i]);
+                    }
+                }
+            }, (response) => {
+                utils.showError(response.body);
+            });
+        },
+
+        /**
          * Function that makes an AJAX request to the server to obtain the next row of the dataset
          */
         getRow() {
             const url = `/get_row/?row=${String(this.n_row)}`;
             this.$http.get(url).then((response) => {
-                if ('errors' in response.body) {
-                    // TODO: Show errors with Pnotify
-                } else if ('row' in response.body) {
-                    this.row = response.body.row;
-                }
-            }, () => {
-                // TODO: Show server error with Pnotify
+                this.row = response.body.row;
+            }, (response) => {
+                utils.showError(response.body);
             });
-        },
-
-        /**
-         * Function called when the user clicks the start button
-         */
-        start() {
-            $('#summary-card').css('display', 'none');
-            $('#app-card').css('display', 'block');
-            this.getRow();
-            this.getCategories();
-        },
-
-        /**
-         * Function that gets the CSV next row
-         */
-        nextRow() {
-            this.n_row += 1;
-            this.getRow();
         },
 
         /**
@@ -125,8 +124,8 @@ const controller = new Vue({
             this.$http.get('/get_categories/').then((response) => {
                 this.categories = response.body.categories;
                 this.total_rows = response.body.total_rows;
-            }, () => {
-                // TODO: Show server error with notify
+            }, (response) => {
+                utils.showError(response.body);
             });
         },
 
@@ -135,14 +134,21 @@ const controller = new Vue({
          */
         postRow(event) {
             const category = $(event.target).text().replace(/\s/g, '');
-            this.$http.post('/post_row/', { n_row: this.n_row, category }).then((response) => {
+            this.$http.post('/post_row/', { n_row: this.n_row, category }).then(() => {
                 this.nextRow();
-            }, () => {
-                // TODO: Show server error with notify
+            }, (response) => {
+                utils.showError(response.body);
             });
         },
-    },
 
+        /**
+         * Function that gets the CSV next row
+         */
+        nextRow() {
+            this.n_row += 1;
+            this.getRow();
+        },
+    },
 });
 
 window.controller = controller;
