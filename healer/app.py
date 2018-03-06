@@ -7,7 +7,7 @@ The app module, containing the app factory function.
 from flask import Flask, render_template
 
 from healer import commands, public
-from healer.extensions import bcrypt, cache, csrf_protect, debug_toolbar, webpack
+from healer.extensions import bcrypt, cache, debug_toolbar, webpack
 from healer.settings import ProdConfig
 
 
@@ -29,7 +29,6 @@ def register_extensions(app):
     """Register Flask extensions."""
     bcrypt.init_app(app)
     cache.init_app(app)
-    csrf_protect.init_app(app)
     debug_toolbar.init_app(app)
     webpack.init_app(app)
     return None

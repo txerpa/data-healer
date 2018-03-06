@@ -7,18 +7,26 @@
  */
 
 import VueResource from 'vue-resource';
+import PNotify from 'pnotify';
 
 // JavaScript modules
 require('jquery');
 require('font-awesome-webpack');
+require('bootstrap');
 require('materialize-css');
 
-// Vue definition
+/* Global variables definition */
+
+// Vue
 const Vue = require('vue');
 Vue.use(VueResource);
 Vue.config.devtools = true;
 window.Vue = Vue;
 
-// Your own code
+// Pnotify
+PNotify.prototype.options.styling = 'fontawesome';
+window.PNotify = PNotify;
+
+// Own code
 require('./utils.js');
 require('./controller.js');

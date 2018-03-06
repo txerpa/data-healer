@@ -1,4 +1,4 @@
-/* eslint-disable no-extend-native,guard-for-in,func-names */
+/* eslint-disable no-extend-native,guard-for-in,func-names,no-plusplus,no-prototype-builtins,no-restricted-syntax */
 
 /*
  * Util functions
@@ -25,6 +25,24 @@ const utils = {
     listToStr(list) {
         return Array(list).join(', ');
     },
+
+    /**
+     * Chunk an array in groups of count size
+     * @param {array} arr
+     * @param {int} count
+     * @returns {array}
+     */
+    chunkArray(arr, count) {
+        const chunks = [];
+        while (arr.length) {
+            const chunkSize = Math.ceil(arr.length / count--);
+            const chunk = arr.slice(0, chunkSize);
+            chunks.push(chunk);
+            arr = arr.slice(chunkSize);
+        }
+        return chunks;
+    },
+
 };
 
 window.utils = utils;

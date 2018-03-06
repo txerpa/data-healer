@@ -1,4 +1,4 @@
-/* eslint-disable camelcase,no-trailing-spaces,no-undef */
+/* eslint-disable camelcase,no-trailing-spaces,no-undef,no-prototype-builtins,no-restricted-syntax,no-plusplus,no-unused-vars */
 
 /*
     Controller data-healer
@@ -9,6 +9,8 @@ const controller = new Vue({
     el: '#app',
 
     data: {
+
+        // Configuration  (conf.py) Only for show
         input_file: '',
         input_separator: '',
         columns_to_show: '',
@@ -17,11 +19,46 @@ const controller = new Vue({
         output_separator: '',
         inferred_column: '',
 
-        row: 0,
+        categories: [],
+
+        // Current row in the CSV
+        n_row: 0,
+        row: {},
+        total_rows: 0,
     },
 
     computed: {
 
+        /**
+         * Computable for show the dataset progress
+         * @returns {string}
+         */
+        progress() {
+            return `${this.n_row} of ${this.total_rows}`;
+        },
+
+        /**
+         * Computable that shows dynamic row attrs in content HTML card
+         * @returns {html}
+         */
+        showRow() {
+            let html = '<ul class="collection">';
+            for (const key in this.row) {
+                if (this.row.hasOwnProperty(key)) {
+                    html += `<li class="collection-item">${this.row[key]}</li>`;
+                }
+            }
+            html += '</ul>';
+            return html;
+        },
+
+        /**
+         * Computable that shows dynamic categories in categories HTML card
+         * @returns {html}
+         */
+        categorySections() {
+            return utils.chunkArray(this.categories, 2);
+        },
     },
 
     methods: {
@@ -49,14 +86,17 @@ const controller = new Vue({
 
         /**
          * Function that makes an AJAX request to the server to obtain the next row of the dataset
-         * @param {int} row
          */
-        get_row(row = 0) {
-            const url = `/get_row/?row=${String(row)}`;
+        getRow() {
+            const url = `/get_row/?row=${String(this.n_row)}`;
             this.$http.get(url).then((response) => {
-                console.log(response.body);
+                if ('errors' in response.body) {
+                    // TODO: Show errors with Pnotify
+                } else if ('row' in response.body) {
+                    this.row = response.body.row;
+                }
             }, () => {
-                console.log('Show error');
+                // TODO: Show server error with Pnotify
             });
         },
 
@@ -66,7 +106,40 @@ const controller = new Vue({
         start() {
             $('#summary-card').css('display', 'none');
             $('#app-card').css('display', 'block');
-            this.get_row();
+            this.getRow();
+            this.getCategories();
+        },
+
+        /**
+         * Function that gets the CSV next row
+         */
+        nextRow() {
+            this.n_row += 1;
+            this.getRow();
+        },
+
+        /**
+         * Function that obtains the available categories for classify a row
+         */
+        getCategories() {
+            this.$http.get('/get_categories/').then((response) => {
+                this.categories = response.body.categories;
+                this.total_rows = response.body.total_rows;
+            }, () => {
+                // TODO: Show server error with notify
+            });
+        },
+
+        /**
+         * Function that posts a new row in the result dataset
+         */
+        postRow(event) {
+            const category = $(event.target).text().replace(/\s/g, '');
+            this.$http.post('/post_row/', { n_row: this.n_row, category }).then((response) => {
+                this.nextRow();
+            }, () => {
+                // TODO: Show server error with notify
+            });
         },
     },
 

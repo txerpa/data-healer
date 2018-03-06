@@ -11,7 +11,6 @@ from flask_webpack import Webpack
 from flask_wtf.csrf import CSRFProtect
 
 bcrypt = Bcrypt()
-csrf_protect = CSRFProtect()
 cache = Cache()
 debug_toolbar = DebugToolbarExtension()
 webpack = Webpack()
