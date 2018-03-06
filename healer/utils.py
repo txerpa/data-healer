@@ -6,17 +6,9 @@ Helper utilities
 
 import os.path
 
-from flask import flash
 import pandas as pd
 
 import conf
-
-
-def flash_errors(form, category='warning'):
-    """Flash all errors for a form."""
-    for field, errors in form.errors.items():
-        for error in errors:
-            flash('{0} - {1}'.format(getattr(form, field).label.text, error), category)
 
 
 def verify_confs():
@@ -52,3 +44,14 @@ def verify_confs():
     if not os.path.isdir('/' + '/'.join(slices)):
         errors.append('Output path does not exist')
     return errors
+
+
+def list_is_true(list):
+    """
+    Function that checks if all the elements of the list are True
+    :param list:
+    """
+    for elem in list:
+        if not elem:
+            return False
+    return True

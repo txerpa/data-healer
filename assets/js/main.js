@@ -9,7 +9,6 @@
 import VueResource from 'vue-resource';
 
 // JavaScript modules
-require('jquery');
 require('font-awesome-webpack');
 require('materialize-css');
 

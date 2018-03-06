@@ -38,21 +38,6 @@ const controller = new Vue({
         },
 
         /**
-         * Computable that shows dynamic row attrs in content HTML card
-         * @returns {html}
-         */
-        showRow() {
-            let html = '<ul class="collection">';
-            for (const key in this.row) {
-                if (this.row.hasOwnProperty(key)) {
-                    html += `<li class="collection-item">${this.row[key]}</li>`;
-                }
-            }
-            html += '</ul>';
-            return html;
-        },
-
-        /**
          * Computable that shows dynamic categories in categories HTML card
          * @returns {html}
          */
@@ -91,8 +76,8 @@ const controller = new Vue({
             this.$http.get('/check_confs/').then((response) => {
                 if (response.body.errors.length === 0) {
                     utils.showSuccess('Start!');
-                    $('#summary-card').css('display', 'none');
-                    $('#app-card').css('display', 'block');
+                    document.querySelector('#summary-card').style.display = 'none';
+                    document.querySelector('#app-card').style.display = 'block';
                     this.getRow();
                     this.getCategories();
                 } else {
@@ -109,9 +94,10 @@ const controller = new Vue({
          * Function that makes an AJAX request to the server to obtain the next row of the dataset
          */
         getRow() {
-            const url = `/get_row/?row=${String(this.n_row)}`;
+            const url = `/get_row/?n_row=${String(this.n_row)}`;
             this.$http.get(url).then((response) => {
                 this.row = response.body.row;
+                this.n_row = response.body.n_row;
             }, (response) => {
                 utils.showError(response.body);
             });

@@ -52,19 +52,28 @@
     </div>
 
     <div id="app-card" class="row" style="display: None">
+
         <div class="col s12 center">
             <h4 class="white-text thin" v-text="progress"></h4>
         </div>
+
         <div class="col s6 center">
             <h4 class="white-text thin">Row data</h4>
             <div class="card">
-                <div class="card-content" v-html="showRow"></div>
+                <div class="card-content">
+                    <ul class="collection">
+                        <li class="collection-item" v-for="(value, key) in row">
+                            {% raw %}{{ value }}{% endraw %}
+                        </li>
+                    </ul>
+                </div>
                 <a class="btn-floating halfway-fab waves-effect waves-light red"
                    title="Discard row" v-on:click="nextRow()">
                     <i class="fa fa-thumbs-down"></i>
                 </a>
             </div>
         </div>
+
         <div class="col s6 center">
             <h4 class="white-text thin">Categories</h4>
             <div class="card">
@@ -80,6 +89,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
 

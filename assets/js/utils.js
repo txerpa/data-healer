@@ -52,6 +52,7 @@ const utils = {
             type: 'error',
             layout: 'topRight',
             theme: 'sunset',
+            timeout: 10000,
             text,
         }).show();
     },
@@ -65,6 +66,7 @@ const utils = {
             type: 'success',
             layout: 'topRight',
             theme: 'sunset',
+            timeout: 10000,
             text,
         }).show();
     },

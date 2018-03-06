@@ -70,7 +70,6 @@ module.exports = {
     },
     plugins: [
         new ExtractTextPlugin('[name].[hash].css'),
-        new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }),
         new ManifestRevisionPlugin(path.join(__dirname, 'healer', 'webpack', 'manifest.json'), {
             rootAssetPath,
             ignorePaths: ['/js', '/css'],

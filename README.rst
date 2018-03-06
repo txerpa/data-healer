@@ -2,7 +2,7 @@
 Data healer
 ===============================
 
-A flasky app to categorize a unlabelled dataset.
+A flasky app to categorize an unlabelled dataset.
 
 
 Quickstart
