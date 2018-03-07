@@ -27,6 +27,8 @@ def verify_confs():
         if conf.HELP_COLUMN is not None:
             if conf.HELP_COLUMN not in input_df.columns:
                 errors.append('Help column does not exist in the CSV file.')
+        elif len(conf.CATEGORIES) == 0:
+            errors.append('There are not defined categories.')
     if len(conf.COLUMNS_TO_SHOW) == 0:
         errors.append('Columns to show not specified.')
     else:
@@ -37,6 +39,8 @@ def verify_confs():
     if input_df is not None:
         if conf.INFERRED_COLUMN in input_df.columns:
             errors.append('Column {} already exists in the CSV file.'.format(conf.INFERRED_COLUMN))
+    if os.path.exists(conf.OUTPUT_FILE):
+        errors.append('Looks like exists a finished output file. Drop it if you want to start again.')
     slices = conf.OUTPUT_FILE.split('/')
     slices = slices[0:len(slices)-1]
     if not os.path.isdir('/' + '/'.join(slices)):

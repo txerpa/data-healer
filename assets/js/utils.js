@@ -34,11 +34,15 @@ const utils = {
      */
     chunkArray(arr, count) {
         const chunks = [];
-        while (arr.length) {
-            const chunkSize = Math.ceil(arr.length / count--);
-            const chunk = arr.slice(0, chunkSize);
-            chunks.push(chunk);
-            arr = arr.slice(chunkSize);
+        if (arr.length % 2 === 0) {
+            for (let i = 0; i < arr.length; i += count) {
+                chunks.push([arr[i], arr[i + 1]]);
+            }
+        } else {
+            for (let i = 0; i < arr.length - 1; i += count) {
+                chunks.push([arr[i], arr[i + 1]]);
+            }
+            chunks.push([arr[arr.length - 1]]);
         }
         return chunks;
     },

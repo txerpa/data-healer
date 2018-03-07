@@ -102,8 +102,14 @@ const controller = new Vue({
         getRow() {
             const url = `/get_row/?n_row=${String(this.n_row)}`;
             this.$http.get(url).then((response) => {
-                this.row = response.body.row;
-                this.n_row = response.body.n_row;
+                if (response.body.finish === 1) {
+                    utils.showNoty('Finish!', 'success');
+                    document.querySelector('#app-card').style.display = 'none';
+                    document.querySelector('#finish-card').style.display = 'block';
+                } else {
+                    this.row = response.body.row;
+                    this.n_row = response.body.n_row;
+                }
             }, (response) => {
                 utils.showNoty(response.body, 'error');
             });

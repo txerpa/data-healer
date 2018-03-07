@@ -24,7 +24,7 @@ COLUMNS_TO_SHOW = ['original_messages', 'authors', ]
 
 # If this column is not None the category of this column will be used as a clue for the user
 # (this column could have been inferred by an unsupervised learning algorithm)
-HELP_COLUMN = None
+HELP_COLUMN = 'topics'
 
 # If HELP_COLUMN is not provided these are the categories provided to the user in the interface
 CATEGORIES = ['category 1', 'category 2', 'category 3', 'category 4']

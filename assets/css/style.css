@@ -71,3 +71,7 @@ footer .footer-nav {
 a {
     cursor: pointer;
 }
+
+.col.s6 > button {
+   width: 100%;
+}

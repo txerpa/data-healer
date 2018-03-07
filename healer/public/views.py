@@ -49,6 +49,10 @@ def get_row():
     input_df = pd.read_csv(conf.INPUT_FILE, sep=conf.CSV_SEPARATOR, encoding='utf-8')
     n_row = request.args.get('n_row', type=int)
 
+    # Finish
+    if n_row == input_df.shape[0]:
+        return jsonify({'finish': 1})
+
     # If an output file has been started it will continue with it
     if n_row == 0 and os.path.exists(conf.OUTPUT_FILE):
         output_df = pd.read_csv(conf.OUTPUT_FILE, sep=conf.CSV_SEPARATOR, encoding='utf-8')
@@ -60,12 +64,12 @@ def get_row():
             while not list_is_true(list(input_row == output_row)) and n_row < input_df.shape[0]:
                 n_row += 1
                 input_row = input_df.iloc[n_row]
-            return jsonify({'row': {column: input_df.iloc[n_row + 1][column]
-                                    for column in conf.COLUMNS_TO_SHOW}, 'n_row': n_row + 1})
+            n_row += 1
 
     if n_row > input_df.shape[0]:
         return jsonify({'errors': ['row index ({}) is greater than dataframe shape'.format(n_row)]})
-    return jsonify({'row': {column: input_df.iloc[n_row][column] for column in conf.COLUMNS_TO_SHOW}, 'n_row': n_row})
+    return jsonify({'row': {column: input_df.iloc[n_row][column] for column in conf.COLUMNS_TO_SHOW},
+                    'n_row': n_row, 'finish': 0})
 
 
 @blueprint.route('/get_categories/', methods=['GET'])
@@ -86,9 +90,10 @@ def post_row():
     """Post a new row in the final dataset"""
     json = request.get_json()
     input_df = pd.read_csv(conf.INPUT_FILE, sep=conf.CSV_SEPARATOR, encoding='utf-8')
+    partial_output_file = conf.OUTPUT_FILE.split('.')[0] + '_partial.csv'
 
-    if os.path.exists(conf.OUTPUT_FILE):
-        output_df = pd.read_csv(conf.OUTPUT_FILE, sep=conf.CSV_SEPARATOR, encoding='utf-8')
+    if os.path.exists(partial_output_file):
+        output_df = pd.read_csv(partial_output_file, sep=conf.CSV_SEPARATOR, encoding='utf-8')
         columns = output_df.columns.tolist()
     else:
         columns = input_df.columns.tolist()
@@ -99,6 +104,12 @@ def post_row():
     row[conf.INFERRED_COLUMN] = json['category']
     row = pd.DataFrame([row], columns=columns)
     output_df = output_df.append(row)
-    output_df.to_csv(conf.OUTPUT_FILE, sep=conf.CSV_SEPARATOR, encoding='utf-8', index=False)
+
+    if json['n_row'] == input_df.shape[0] - 1:
+        output_df.to_csv(conf.OUTPUT_FILE, sep=conf.CSV_SEPARATOR, encoding='utf-8', index=False)
+        os.remove(partial_output_file)
+    else:
+        output_df.to_csv(partial_output_file, sep=conf.CSV_SEPARATOR, encoding='utf-8', index=False)
+
     return Response(status=200)
 

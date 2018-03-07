@@ -48,11 +48,9 @@
     </div>
 
     <div id="app-card" class="row" style="display: None">
-
         <div class="col s12 center">
             <h4 class="white-text thin" v-text="progress"></h4>
         </div>
-
         <div class="col s6 center">
             <h4 class="white-text thin">Row data</h4>
             <div class="card">
@@ -69,7 +67,6 @@
                 </a>
             </div>
         </div>
-
         <div class="col s6 center">
             <h4 class="white-text thin">Categories</h4>
             <div class="card">
@@ -85,7 +82,18 @@
                 </div>
             </div>
         </div>
+    </div>
 
+    <div id="finish-card" class="row" style="display: None">
+        <div class="col s4 offset-s4">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Finish</span>
+                    Your output file is <strong>{% raw %}{{ output_file }}{% endraw %}</strong>. <br>
+                    It has the column <strong>{% raw %}{{ inferred_column }}{% endraw %}</strong> with your selections.
+                </div>
+            </div>
+        </div>
     </div>
 
 
