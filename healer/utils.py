@@ -19,7 +19,7 @@ def verify_confs():
     errors = []
     if not os.path.exists(conf.INPUT_FILE):
         errors.append('Input file doesn\'t exist.')
-    if conf.CSV_SEPARATOR == '':
+    if conf.CSV_SEPARATOR == '' or conf.CSV_SEPARATOR is None:
         errors.append('Separator not specified.')
     input_df = None
     if len(errors) == 0:
@@ -27,9 +27,9 @@ def verify_confs():
         if conf.HELP_COLUMN is not None:
             if conf.HELP_COLUMN not in input_df.columns:
                 errors.append('Help column does not exist in the CSV file.')
-        elif len(conf.CATEGORIES) == 0:
+        elif conf.CATEGORIES is None or len(conf.CATEGORIES) == 0:
             errors.append('There are not defined categories.')
-    if len(conf.COLUMNS_TO_SHOW) == 0:
+    if conf.COLUMNS_TO_SHOW is None or len(conf.COLUMNS_TO_SHOW) == 0:
         errors.append('Columns to show not specified.')
     else:
         if input_df is not None:

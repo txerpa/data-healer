@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Views configs"""
+"""Test urls"""
 
 import os
 import json
@@ -31,7 +31,6 @@ class ViewTests(unittest.TestCase):
 
     def tearDown(self):
         os.remove('data/input_test.csv')
-        # os.remove('data/output_test.csv')
 
     def test_home(self):
         response = self.app.get('/')
@@ -53,3 +52,4 @@ class ViewTests(unittest.TestCase):
         response = self.app.post('/post_row/',
                                  data=json.dumps({'n_row': 0, 'category': 'A'}), content_type='application/json')
         self.assertNotEqual(response.status_code, 404)
+        os.remove('data/output_test_partial.csv')
