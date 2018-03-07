@@ -34,11 +34,11 @@ class DevConfig(Config):
     ENV = 'dev'
     DEBUG = True
     DEBUG_TB_ENABLED = True
-    CACHE_TYPE = 'simple'
 
 
 class TestConfig(Config):
     """Test configuration."""
 
+    ENV = 'test'
     TESTING = True
     DEBUG = True

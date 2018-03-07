@@ -55,3 +55,6 @@ docs/_build
 # Data
 data/*
 !data/.gitkeep
+
+# Pytest
+/.pytest_cache/
