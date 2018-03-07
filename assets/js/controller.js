@@ -11,12 +11,12 @@ const controller = new Vue({
     data: {
 
         // Configuration  (conf.py) Only for show
+        separator: '',
         input_file: '',
-        input_separator: '',
         columns_to_show: '',
         help_column: '',
         output_file: '',
-        output_separator: '',
+        output_file_exists: false,
         inferred_column: '',
 
         categories: [],
@@ -50,23 +50,29 @@ const controller = new Vue({
 
         /**
          * Controller init function
+         * @param separator: CSV separator
          * @param input_file: Dataset input file
-         * @param input_separator: CSV input separator
          * @param columns_to_show: Dataset columns to show the user
          * @param help_column: If not null is a clue for the user
          * @param output_file: Dataset output file
-         * @param output_separator: CSV output separator
+         * @param output_file_exists: There is an existing output file
          * @param inferred_column: Column name of the inferred column
          */
-        init(input_file, input_separator, columns_to_show,
-             help_column, output_file, output_separator, inferred_column) {
+        init(separator, input_file, columns_to_show, help_column,
+             output_file, output_file_exists, inferred_column) {
+            this.separator = separator;
             this.input_file = input_file;
-            this.input_separator = input_separator;
             this.columns_to_show = utils.strToList(columns_to_show);
             this.help_column = help_column;
             this.output_file = output_file;
-            this.output_separator = output_separator;
+            this.output_file_exists = output_file_exists === '1';
             this.inferred_column = inferred_column;
+
+            if (this.output_file_exists) {
+                utils.showNoty('It seems that there is an output file started. You will continue categorizing ' +
+                               'that file. If you want to start over from the beginning you have to move or drop' +
+                               ' the current output file.', 'success');
+            }
         },
 
         /**
@@ -75,18 +81,18 @@ const controller = new Vue({
         check_confs() {
             this.$http.get('/check_confs/').then((response) => {
                 if (response.body.errors.length === 0) {
-                    utils.showSuccess('Start!');
+                    utils.showNoty('Start!', 'success');
                     document.querySelector('#summary-card').style.display = 'none';
                     document.querySelector('#app-card').style.display = 'block';
                     this.getRow();
                     this.getCategories();
                 } else {
                     for (let i = 0; i < response.body.errors.length; i++) {
-                        utils.showError(response.body.errors[i]);
+                        utils.showNoty(response.body.errors[i], 'error');
                     }
                 }
             }, (response) => {
-                utils.showError(response.body);
+                utils.showNoty(response.body, 'error');
             });
         },
 
@@ -99,7 +105,7 @@ const controller = new Vue({
                 this.row = response.body.row;
                 this.n_row = response.body.n_row;
             }, (response) => {
-                utils.showError(response.body);
+                utils.showNoty(response.body, 'error');
             });
         },
 
@@ -111,7 +117,7 @@ const controller = new Vue({
                 this.categories = response.body.categories;
                 this.total_rows = response.body.total_rows;
             }, (response) => {
-                utils.showError(response.body);
+                utils.showNoty(response.body, 'error');
             });
         },
 
@@ -123,7 +129,7 @@ const controller = new Vue({
             this.$http.post('/post_row/', { n_row: this.n_row, category }).then(() => {
                 this.nextRow();
             }, (response) => {
-                utils.showError(response.body);
+                utils.showNoty(response.body, 'error');
             });
         },
 

@@ -57,8 +57,8 @@
 
     {% block js %}
         <script type="text/javascript">
-            controller.init("{{ input_file }}", "{{  input_separator }}", "{{ columns_to_show }}",
-                "{{ help_column }}", "{{ output_file }}", "{{ output_separator }}", "{{ inferred_column }}");
+            controller.init("{{ separator }}", "{{ input_file }}", "{{ columns_to_show }}",
+                "{{ help_column }}", "{{ output_file }}", "{{ output_file_exists }}", "{{ inferred_column }}");
         </script>
     {% endblock %}
 

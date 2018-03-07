@@ -19,16 +19,14 @@ def verify_confs():
     errors = []
     if not os.path.exists(conf.INPUT_FILE):
         errors.append('Input file doesn\'t exist.')
-    if conf.INPUT_SEPARATOR == '':
-        errors.append('Input separator not specified.')
+    if conf.CSV_SEPARATOR == '':
+        errors.append('Separator not specified.')
     input_df = None
     if len(errors) == 0:
-        input_df = pd.read_csv(conf.INPUT_FILE, sep=conf.INPUT_SEPARATOR, encoding='utf-8')
+        input_df = pd.read_csv(conf.INPUT_FILE, sep=conf.CSV_SEPARATOR, encoding='utf-8')
         if conf.HELP_COLUMN is not None:
             if conf.HELP_COLUMN not in input_df.columns:
                 errors.append('Help column does not exist in the CSV file.')
-    if conf.OUTPUT_SEPARATOR == '':
-        errors.append('Output separator not specified.')
     if len(conf.COLUMNS_TO_SHOW) == 0:
         errors.append('Columns to show not specified.')
     else:

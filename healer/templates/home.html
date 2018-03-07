@@ -15,31 +15,27 @@
                     <span class="card-title">Summary before you start</span>
                     <ul>
                         <li>
-                            <strong>Input file: </strong>
-                            {% raw %}{{ input_file }}{% endraw %}
+                            <strong>CSV separator: </strong>
+                            {% raw %}{{ separator }}{% endraw %}
                         </li>
                         <li>
-                            <strong>Input separator: </strong>
-                            {% raw %}{{ input_separator }}{% endraw %}
+                            <strong>Input file: </strong>
+                            {% raw %}{{ input_file }}{% endraw %}
                         </li>
                         <li>
                             <strong>Columns to show: </strong>
                             {% raw %}{{ utils.listToStr(columns_to_show) }}{% endraw %}
                         </li>
                         <li>
-                            <strong>Input separator: </strong>
+                            <strong>Help column: </strong>
                             {% raw %}{{ help_column }}{% endraw %}
                         </li>
                         <li>
-                            <strong>Input separator: </strong>
+                            <strong>Output file: </strong>
                             {% raw %}{{ output_file }}{% endraw %}
                         </li>
                         <li>
-                            <strong>Input separator: </strong>
-                            {% raw %}{{ output_separator }}{% endraw %}
-                        </li>
-                        <li>
-                            <strong>Input separator: </strong>
+                            <strong>Inferred column: </strong>
                             {% raw %}{{ inferred_column }}{% endraw %}
                         </li>
                     </ul>

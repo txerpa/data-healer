@@ -46,28 +46,15 @@ const utils = {
     /**
      * Function that shows an error notification
      * @param {str} text
+     * @param {str} type (warning, error, success)
      */
-    showError(text) {
+    showNoty(text, type) {
         new Noty({
-            type: 'error',
+            type,
+            text,
             layout: 'topRight',
             theme: 'sunset',
-            timeout: 10000,
-            text,
-        }).show();
-    },
-
-    /**
-     * Function that shows a success notification
-     * @param {str} text
-     */
-    showSuccess(text) {
-        new Noty({
-            type: 'success',
-            layout: 'topRight',
-            theme: 'sunset',
-            timeout: 10000,
-            text,
+            timeout: 30000,
         }).show();
     },
 

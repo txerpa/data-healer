@@ -9,16 +9,15 @@ import os
 
 ROOT_DIR = os.path.abspath(__file__).split('conf.py')[0]
 
+# CSV file row separator
+CSV_SEPARATOR = ';'
 
 # ======================================================================================================================
 # Input configuration
 # ======================================================================================================================
 
 # Input dataset file
-INPUT_FILE = ROOT_DIR + 'data/N6272_D2018-03-02_categorized.csv'
-
-# Input CSV file row separator
-INPUT_SEPARATOR = ';'
+INPUT_FILE = ROOT_DIR + 'data/input.csv'
 
 # Columns to show in the screen (information that the user needs to categorize the row)
 COLUMNS_TO_SHOW = ['original_messages', 'authors', ]
@@ -28,7 +27,7 @@ COLUMNS_TO_SHOW = ['original_messages', 'authors', ]
 HELP_COLUMN = None
 
 # If HELP_COLUMN is not provided these are the categories provided to the user in the interface
-CATEGORIES = ['category1', 'category2', 'category3', 'category4']
+CATEGORIES = ['category 1', 'category 2', 'category 3', 'category 4']
 
 
 # ======================================================================================================================
@@ -37,9 +36,6 @@ CATEGORIES = ['category1', 'category2', 'category3', 'category4']
 
 # Output dataset file
 OUTPUT_FILE = ROOT_DIR + 'data/output.csv'
-
-# Output CSV file row separator
-OUTPUT_SEPARATOR = ';'
 
 # Name of the column with the new categories
 INFERRED_COLUMN = 'inferred_category'
