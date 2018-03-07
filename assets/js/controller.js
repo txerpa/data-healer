@@ -101,6 +101,7 @@ const controller = new Vue({
                     utils.showNoty('Finish!', 'success');
                     document.querySelector('#app-card').style.display = 'none';
                     document.querySelector('#finish-card').style.display = 'block';
+                    utils.removeEnterListener();
                 } else {
                     this.row = response.body.row;
                     this.n_row = response.body.n_row;

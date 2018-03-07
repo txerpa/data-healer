@@ -62,15 +62,24 @@ const utils = {
         }).show();
     },
 
+    keyDownHandler(event) {
+        if (event.keyCode === 13) {
+            document.querySelector('#default-category-button').click();
+        }
+    },
+
     /**
-     * Function that creates an enter click listener for default selection
+     * Function that creates an enter listener
      */
     addEnterListerner() {
-        document.addEventListener('keydown', (event) => {
-            if (event.keyCode === 13) {
-                document.querySelector('#default-category-button').click();
-            }
-        });
+        document.addEventListener('keydown', this.keyDownHandler);
+    },
+
+    /**
+     * Function that removes the enter listener
+     */
+    removeEnterListener() {
+        document.removeEventListener('keydown', this.keyDownHandler);
     },
 
 };
