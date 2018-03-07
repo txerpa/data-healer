@@ -62,10 +62,25 @@ const utils = {
         }).show();
     },
 
+    /**
+     * Function that creates an enter click listener for default selection
+     */
+    addEnterListerner() {
+        document.addEventListener('keydown', (event) => {
+            if (event.keyCode === 13) {
+                document.querySelector('#default-category-button').click();
+            }
+        });
+    },
+
 };
 
 window.utils = utils;
 
 String.prototype.replaceAll = function (search, replacement) {
     return this.replace(new RegExp(search, 'g'), replacement);
+};
+
+String.prototype.trim = function () {
+    return this.toString().replace(/^\s+|\s+$/g, '');
 };

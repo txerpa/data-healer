@@ -4,7 +4,7 @@
 Public section, including homepage and signup
 """
 
-import os.path
+import os
 
 from flask import Blueprint, render_template, jsonify, request, Response
 import pandas as pd
@@ -27,7 +27,7 @@ def home():
         'output_file_exists': int(os.path.exists(conf.OUTPUT_FILE)),
         'inferred_column': conf.INFERRED_COLUMN
     }
-    return render_template('home.html', **info)
+    return render_template('index.html', **info)
 
 
 @blueprint.route('/about/', methods=['GET'])
@@ -54,8 +54,9 @@ def get_row():
         return jsonify({'finish': 1})
 
     # If an output file has been started it will continue with it
-    if n_row == 0 and os.path.exists(conf.OUTPUT_FILE):
-        output_df = pd.read_csv(conf.OUTPUT_FILE, sep=conf.CSV_SEPARATOR, encoding='utf-8')
+    partial_output_file = conf.OUTPUT_FILE.split('.')[0] + '_partial.csv'
+    if n_row == 0 and os.path.exists(partial_output_file):
+        output_df = pd.read_csv(partial_output_file, sep=conf.CSV_SEPARATOR, encoding='utf-8')
         if conf.INFERRED_COLUMN in output_df.columns.tolist():
             output_df.drop(conf.INFERRED_COLUMN, axis=1, inplace=True)
             n_row = output_df.shape[0] - 1
@@ -68,8 +69,11 @@ def get_row():
 
     if n_row > input_df.shape[0]:
         return jsonify({'errors': ['row index ({}) is greater than dataframe shape'.format(n_row)]})
-    return jsonify({'row': {column: input_df.iloc[n_row][column] for column in conf.COLUMNS_TO_SHOW},
-                    'n_row': n_row, 'finish': 0})
+
+    row = {column: input_df.iloc[n_row][column] for column in conf.COLUMNS_TO_SHOW}
+    if conf.HELP_COLUMN in input_df.columns.tolist():
+        row[conf.HELP_COLUMN] = input_df.iloc[n_row][conf.HELP_COLUMN]
+    return jsonify({'row': row, 'n_row': n_row, 'finish': 0})
 
 
 @blueprint.route('/get_categories/', methods=['GET'])

@@ -37,13 +37,6 @@ const controller = new Vue({
             return `${this.n_row} of ${this.total_rows}`;
         },
 
-        /**
-         * Computable that shows dynamic categories in categories HTML card
-         * @returns {html}
-         */
-        categorySections() {
-            return utils.chunkArray(this.categories, 2);
-        },
     },
 
     methods: {
@@ -83,9 +76,11 @@ const controller = new Vue({
                 if (response.body.errors.length === 0) {
                     utils.showNoty('Start!', 'success');
                     document.querySelector('#summary-card').style.display = 'none';
+                    document.querySelector('#progress').style.display = 'block';
                     document.querySelector('#app-card').style.display = 'block';
                     this.getRow();
                     this.getCategories();
+                    utils.addEnterListerner();
                 } else {
                     for (let i = 0; i < response.body.errors.length; i++) {
                         utils.showNoty(response.body.errors[i], 'error');
@@ -131,7 +126,7 @@ const controller = new Vue({
          * Function that posts a new row in the result dataset
          */
         postRow(event) {
-            const category = $(event.target).text().replace(/\s/g, '');
+            const category = $(event.target).text().trim();
             this.$http.post('/post_row/', { n_row: this.n_row, category }).then(() => {
                 this.nextRow();
             }, (response) => {

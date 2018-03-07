@@ -23,35 +23,19 @@
 
 </head>
 
-<body class="{% block body_class %}{% endblock %} blue-grey darken-1">
-{% block body %}
+<body class="blue-grey darken-1">
 
-    <header>{% block header %}{% endblock %}</header>
+    <div id="app">
+        {% block body %}
 
-    <div id="app" class="{% block content_class %}container{% endblock content_class %}">
-
-        <div role="main">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <div class="row">
-                        <div class="col s12">
-                            {% for category, message in messages %}
-                                <div class="alert alert-{{ category }}">
-                                    <a class="close" title="Close" href="#" data-dismiss="alert">&times;</a>
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
-            {% endwith %}
+            {% include "header.html" %}
 
             {% block content %}{% endblock %}
-        </div>
 
-    </div><!-- end container -->
+            {% include "footer.html" %}
 
-    {% include "footer.html" %}
+        {% endblock %}
+    </div>
 
     {{ javascript_tag('main_js') | safe }}
 
@@ -62,7 +46,6 @@
         </script>
     {% endblock %}
 
-{% endblock %}
 </body>
 
 </html>

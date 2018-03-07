@@ -1,13 +1,13 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
 
 {% block page_title %}Page Not Found{% endblock %}
 
 {% block content %}
-    <div class="jumbotron">
+    <div class="row">
         <div class="text-center">
             <h1>404</h1>
             <p>Sorry, that page doesn't exist.</p>
-            <p>Want to <a href="{{ url_for('public.home') }}">go home</a> instead?</p>
+            <p>Want to <a href="{{ url_for('public.index') }}">go home</a> instead?</p>
         </div>
     </div>
 {% endblock %}
