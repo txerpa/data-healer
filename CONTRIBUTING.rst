@@ -13,7 +13,7 @@ Types of Contributions
 Report Bugs
 ~~~~~~~~~~~
 
-Report bugs at https://github.com/txerpa/data-healer/issues.
+Report bugs at https://github.com/txerpa/data-healer/issues
 
 If you are reporting a bug, please include:
 
@@ -43,7 +43,7 @@ articles, and such.
 Submit Feedback
 ~~~~~~~~~~~~~~~
 
-The best way to send feedback is to file an issue at https://github.com/txerpa/data-healer/issues.
+The best way to send feedback is to file an issue at https://github.com/txerpa/data-healer/issues
 
 If you are proposing a feature:
 
@@ -68,9 +68,7 @@ Run the following commands to bootstrap your environment ::
 
     git clone https://github.com/txerpa/data-healer
     cd data-healer
-    pip install -r requirements.txt
-    npm install
-    npm start  # run the webpack dev server and flask server using concurrently
+    pip install -r requirements/dev.txt
 
 In general, before running shell commands, set the ``FLASK_APP`` and
 ``FLASK_DEBUG`` environment variables ::
@@ -78,35 +76,26 @@ In general, before running shell commands, set the ``FLASK_APP`` and
     export FLASK_APP=healer_app.py
     export FLASK_DEBUG=1
 
+Install npm dependencies::
+
+    npm install
+    npm start  # run the webpack dev server and flask server using concurrently
+
+To run all tests, run ::
+
+    flask test
+
 
 Deployment
 ----------
 
 To deploy::
 
+    export FLASK_APP=healer_app.py
     export FLASK_DEBUG=0
     npm run build   # build assets with webpack
     flask run       # start the flask server
 
 In your production environment, make sure the ``FLASK_DEBUG`` environment
 variable is unset or is set to ``0``, so that ``ProdConfig`` is used.
-
-
-Shell
------
-
-To open the interactive shell, run ::
-
-    flask shell
-
-By default, you will have access to the flask ``app``.
-
-
-Running Tests
--------------
-
-To run all tests, run ::
-
-    flask test
-
 

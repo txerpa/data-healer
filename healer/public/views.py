@@ -16,7 +16,7 @@ blueprint = Blueprint('public', __name__, static_folder='../static')
 
 
 @blueprint.route('/', methods=['GET'])
-def home():
+def index():
     """Home page"""
     info = {
         'separator': conf.CSV_SEPARATOR,

@@ -1,0 +1,27 @@
+# Base requirements
+
+# Flask
+Flask==0.12.2
+MarkupSafe==1.0
+Werkzeug==0.14.1
+Jinja2==2.10
+itsdangerous==0.24
+click>=5.0
+
+# Webpack
+flask-webpack==0.1.0
+
+# Caching
+Flask-Caching>=1.0.0
+
+# Csrf
+flask-wtf==0.14.2
+
+# Bcrypt
+flask-bcrypt==0.7.1
+
+# Numpy
+numpy==1.14.1
+
+# Pandas
+pandas==0.22.0

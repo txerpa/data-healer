@@ -5,7 +5,7 @@ Credits
 Development Lead
 ----------------
 
-* Alberto Pou Quirós <alberto.pou@txerpa.com>
+* `Alberto Pou Quirós <https://github.com/bertini36/>`_ <alberto.pou@txerpa.com>
 
 Contributors
 ------------
