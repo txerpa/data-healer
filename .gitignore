@@ -6,7 +6,6 @@
 # Packages
 *.egg
 *.egg-info
-build
 eggs
 parts
 var
@@ -45,7 +44,6 @@ docs/_build
 /node_modules/
 
 # webpack-built files
-/healer/static/build/
 /healer/webpack/manifest.json
 
 # Pycharm

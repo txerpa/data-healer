@@ -57,6 +57,11 @@ Get Started!
 
 Ready to contribute? Here's how to set up `data-healer` for local development.
 
+Operating system requirements:
+
+    * Python
+    * `Node <https://nodejs.org/es//>`_
+
 First, set your app's secret key as an environment variable. For example,
 add the following to ``.bashrc`` or ``.bash_profile``.
 

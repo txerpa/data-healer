@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import subprocess
-
 from setuptools import setup
-
-subprocess.check_call('npm run build', shell=True)
 
 
 def requirements():
@@ -22,9 +18,8 @@ setup(
     name='data-healer',
     description='A flasky app to categorize unlabeled datasets',
     url='https://github.com/txerpa/data-healer',
-    author='Txerpa',
-    maintainer='Alberto Pou Quirós',
-    maintainer_email='alberto.pou@txerpa.com',
+    author='Alberto Pou Quirós',
+    author_email='albertopouquiros@gmail.com',
     version='1.0.0',
     license='MIT License',
     python_requires='>={}.{}'.format(*REQUIRED_PYTHON),
