@@ -3,7 +3,8 @@
 import subprocess
 
 from setuptools import setup
-from distutils.command.build import build
+
+subprocess.check_call('npm run build', shell=True)
 
 
 def requirements():
@@ -14,12 +15,6 @@ def requirements():
         return f.read().splitlines()
 
 
-class NPMInstall(build):
-    def run(self):
-        self.run_command('npm run build')
-        build.run(self)
-
-
 REQUIRED_PYTHON = (2, 7)
 
 
@@ -28,17 +23,14 @@ setup(
     description='A flasky app to categorize unlabeled datasets',
     url='https://github.com/txerpa/data-healer',
     author='Txerpa',
-    author_email='alberto.pou@txerpa.com',
+    maintainer='Alberto Pou Quirós',
+    maintainer_email='alberto.pou@txerpa.com',
     version='1.0.0',
-    license='MIT',
+    license='MIT License',
     python_requires='>={}.{}'.format(*REQUIRED_PYTHON),
     packages=['healer'],
     install_requires=requirements(),
-    cmdclass={
-        'npm_install': NPMInstall
-    },
     scripts=[
-        'bin/data-healer-npm',
         'bin/data-healer-run',
     ],
     keywords='dataset unlabeled categorize',
@@ -53,5 +45,6 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
+        'Operating System :: OS Independent',
     ],
 )
