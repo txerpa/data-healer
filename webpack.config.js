@@ -12,7 +12,7 @@ const ManifestRevisionPlugin = require('manifest-revision-webpack-plugin');
 const debug = (process.env.NODE_ENV !== 'production');
 
 // Development asset host (webpack dev server)
-const publicHost = debug ? 'http://localhost:2992' : '';
+const publicHost = debug ? 'http://localhost:5000' : '';
 
 const rootAssetPath = path.join(__dirname, 'assets');
 
