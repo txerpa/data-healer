@@ -9,8 +9,8 @@ Why?
 
 In machine learning world, sometimes you need to categorize an unlabeled dataset. Probably yo have obtained
 data from a third party and in most cases the dataset is big and you try to categorize it using an unsupervised
-learning algorithm such as `Latent Dirichlet Allocation <https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation/>`_,
-`KMeans <https://en.wikipedia.org/wiki/K-means_clustering/>`_, `DBSCAN <https://en.wikipedia.org/wiki/DBSCAN/>`_, ...
+learning algorithm such as [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation),
+[KMeans](https://en.wikipedia.org/wiki/K-means_clustering), ...
 However, depending on the nature of your data, get a good categorization with these algorithms is really hard and you
 need that a human supervise the categorization. You can't infer a good classifier without a good labeled dataset.
 
