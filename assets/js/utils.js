@@ -19,35 +19,6 @@ const utils = {
     },
 
     /**
-     * Function that cast a list into a string for show in the HTML
-     * @param {array} list
-     */
-    listToStr(list) {
-        return Array(list).join(', ');
-    },
-
-    /**
-     * Chunk an array in groups of count size
-     * @param {array} arr
-     * @param {int} count
-     * @returns {array}
-     */
-    chunkArray(arr, count) {
-        const chunks = [];
-        if (arr.length % 2 === 0) {
-            for (let i = 0; i < arr.length; i += count) {
-                chunks.push([arr[i], arr[i + 1]]);
-            }
-        } else {
-            for (let i = 0; i < arr.length - 1; i += count) {
-                chunks.push([arr[i], arr[i + 1]]);
-            }
-            chunks.push([arr[arr.length - 1]]);
-        }
-        return chunks;
-    },
-
-    /**
      * Function that shows an error notification
      * @param {str} text
      * @param {str} type (warning, error, success)
@@ -64,7 +35,7 @@ const utils = {
 
     keyDownHandler(event) {
         if (event.keyCode === 13) {
-            document.querySelector('#default-category-button').click();
+            document.querySelector('#default-class-button').click();
         }
     },
 

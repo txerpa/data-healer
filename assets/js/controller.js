@@ -1,7 +1,7 @@
 /* eslint-disable camelcase,no-trailing-spaces,no-undef,no-prototype-builtins,no-restricted-syntax,no-plusplus,no-unused-vars,guard-for-in,no-const-assign */
 
 /*
-    Controller data-healer
+    Data-healer controller
 */
 
 const controller = new Vue({
@@ -10,16 +10,14 @@ const controller = new Vue({
 
     data: {
 
-        // Configuration  (conf.py) Only for show
-        separator: '',
+        // Configuration
         input_file: '',
+        separator: '',
         columns_to_show: '',
         help_column: '',
         output_file: '',
-        output_file_exists: false,
-        inferred_column: '',
-
-        categories: [],
+        class_column: '',
+        classes: '',
 
         // Current row in the CSV
         n_row: 0,
@@ -42,44 +40,27 @@ const controller = new Vue({
     methods: {
 
         /**
-         * Controller init function
-         * @param separator: CSV separator
-         * @param input_file: Dataset input file
-         * @param columns_to_show: Dataset columns to show the user
-         * @param help_column: If not null is a clue for the user
-         * @param output_file: Dataset output file
-         * @param output_file_exists: There is an existing output file
-         * @param inferred_column: Column name of the inferred column
+         * Function that checks the configurations set by the user
          */
-        init(separator, input_file, columns_to_show, help_column,
-             output_file, output_file_exists, inferred_column) {
-            this.separator = separator;
-            this.input_file = input_file;
-            this.columns_to_show = utils.strToList(columns_to_show);
-            this.help_column = help_column;
-            this.output_file = output_file;
-            this.output_file_exists = output_file_exists === '1';
-            this.inferred_column = inferred_column;
-
-            if (this.output_file_exists) {
-                utils.showNoty('It seems that there is an output file started. You will continue categorizing ' +
-                               'that file. If you want to start over from the beginning you have to move or drop' +
-                               ' the current output file.', 'success');
-            }
-        },
-
-        /**
-         * Function that checks the configurations
-         */
-        check_confs() {
-            this.$http.get('/check_confs/').then((response) => {
-                if (response.body.errors.length === 0) {
+        start() {
+            const data = {
+                input_file: this.input_file,
+                separator: this.separator,
+                columns_to_show: this.columns_to_show,
+                help_column: this.help_column,
+                output_file: this.output_file,
+                class_column: this.class_column,
+                classes: this.classes,
+            };
+            this.$http.post('/start/', data).then((response) => {
+                if (!response.body.hasOwnProperty('errors')) {
                     utils.showNoty('Start!', 'success');
-                    document.querySelector('#summary-card').style.display = 'none';
+                    document.querySelector('#config-card').style.display = 'none';
                     document.querySelector('#progress').style.display = 'block';
                     document.querySelector('#app-card').style.display = 'block';
+                    this.classes = response.body.classes;
+                    this.total_rows = response.body.total_rows;
                     this.getRow();
-                    this.getCategories();
                     utils.addEnterListerner();
                 } else {
                     for (let i = 0; i < response.body.errors.length; i++) {
@@ -95,7 +76,9 @@ const controller = new Vue({
          * Function that makes an AJAX request to the server to obtain the next row of the dataset
          */
         getRow() {
-            const url = `/get_row/?n_row=${String(this.n_row)}`;
+            const url = `/get_row/?input_file=${this.input_file}&separator=${this.separator}
+            &columns_to_show=${this.columns_to_show}&help_column=${this.help_column}
+            &output_file=${this.output_file}&class_column=${this.class_column}&n_row=${this.n_row}`;
             this.$http.get(url).then((response) => {
                 if (response.body.finish === 1) {
                     utils.showNoty('Finish!', 'success');
@@ -103,6 +86,10 @@ const controller = new Vue({
                     document.querySelector('#finish-card').style.display = 'block';
                     utils.removeEnterListener();
                 } else {
+                    if (response.body.existing_control_file === 1) {
+                        utils.showNoty('There is a control file saved, you will continue with it. \n' +
+                            'If you want to start again, specify a new output file in the configuration form', 'info');
+                    }
                     this.row = response.body.row;
                     this.n_row = response.body.n_row;
                 }
@@ -112,23 +99,18 @@ const controller = new Vue({
         },
 
         /**
-         * Function that obtains the available categories for classify a row
-         */
-        getCategories() {
-            this.$http.get('/get_categories/').then((response) => {
-                this.categories = response.body.categories;
-                this.total_rows = response.body.total_rows;
-            }, (response) => {
-                utils.showNoty(response.body, 'error');
-            });
-        },
-
-        /**
          * Function that posts a new row in the result dataset
          */
         postRow(event) {
-            const category = $(event.target).text().trim();
-            this.$http.post('/post_row/', { n_row: this.n_row, category }).then(() => {
+            const data = {
+                input_file: this.input_file,
+                separator: this.separator,
+                output_file: this.output_file,
+                class_column: this.class_column,
+                n_row: this.n_row,
+                selected_class: $(event.target).text().trim(),
+            };
+            this.$http.post('/post_row/', data).then(() => {
                 this.nextRow();
             }, (response) => {
                 utils.showNoty(response.body, 'error');
@@ -136,7 +118,7 @@ const controller = new Vue({
         },
 
         /**
-         * Function that gets the CSV next row
+         * Function that gets next CSV row
          */
         nextRow() {
             this.n_row += 1;
