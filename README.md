@@ -24,7 +24,7 @@ inferred column as a default option to speed up the category selection process.
 
 Installation
 ------------
-Until it will be in Pypi::
+Until it will be on Pypi::
 
     git clone https://github.com/txerpa/data-healer
     cd data-healer/
