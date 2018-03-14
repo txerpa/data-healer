@@ -72,7 +72,9 @@ def check_config(input_file, separator, columns_to_show, help_column, output_fil
     slices = output_file.split('/')
     slices = slices[0:len(slices)-1]
     if not os.path.isdir('/' + '/'.join(slices)):
-        errors.append('Output path does not exist')
+        errors.append('Output path doesn\'t exist')
+    if input_file == output_file:
+        errors.append('Input and output must be different files')
     partial_output_file = output_file.split('.')[0] + '_partial.csv'
     if os.path.exists(partial_output_file):
         output_df = pd.read_csv(partial_output_file, sep=separator, encoding='utf-8')

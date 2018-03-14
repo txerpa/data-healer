@@ -108,7 +108,19 @@ class ViewTests(unittest.TestCase):
         output_file = 'data/output_test.csv'
         errors = check_config(self.input_file, translate_separator(self.separator), self.columns_to_show,
                               self.help_column, output_file, self.class_column, self.classes)
-        self.assertTrue('Output path does not exist' in errors)
+        self.assertTrue('Output path doesn\'t exist' in errors)
+
+    def test_input_output_same(self):
+        output_file = 'input_test.csv'
+        errors = check_config(self.input_file, translate_separator(self.separator), self.columns_to_show,
+                              self.help_column, output_file, self.class_column, self.classes)
+        self.assertTrue('Input and output must be different files' in errors)
+
+    def test_input_output_not_same(self):
+        output_file = 'output_test.csv'
+        errors = check_config(self.input_file, translate_separator(self.separator), self.columns_to_show,
+                              self.help_column, output_file, self.class_column, self.classes)
+        self.assertFalse('Input and output must be different files' in errors)
 
     def test_control_file_saved(self):
         output_file = 'output_test.csv'
