@@ -44,7 +44,7 @@ def start():
 
 @blueprint.route('/get_row/', methods=['GET'])
 def get_row():
-    """Get the next row of the dataset"""
+    """Get the n specified of the dataset"""
     input_file = remove_spaces(request.args.get('input_file', type=str))
     separator = translate_separator(remove_spaces(request.args.get('separator', type=str)))
     columns_to_show = str_to_list(remove_spaces(request.args.get('columns_to_show', type=str)))
@@ -55,7 +55,7 @@ def get_row():
 
     input_df = pd.read_csv(input_file, sep=separator, encoding='utf-8')
 
-    # Finish
+    # Finish classification
     if n_row == input_df.shape[0]:
         return json.dumps({'finish': 1}, cls=NumpyJsonEncoder)
 
@@ -70,6 +70,8 @@ def get_row():
             n_row = output_df.shape[0] - 1
             input_row = input_df.iloc[n_row]
             output_row = output_df.iloc[n_row]
+
+            # Search last row classified
             while not list_is_true(list(input_row == output_row)) and n_row < input_df.shape[0]:
                 n_row += 1
                 input_row = input_df.iloc[n_row]
@@ -79,22 +81,24 @@ def get_row():
         return json.dumps({'errors': ['row index ({}) is greater than dataframe shape'.format(n_row)]},
                           cls=NumpyJsonEncoder)
 
+    # Get required row information
     row = {column: input_df.iloc[n_row][column] for column in columns_to_show}
     if help_column in input_df.columns:
         row[help_column] = input_df.iloc[n_row][help_column]
 
-    return json.dumps({'row': row, 'n_row': n_row, 'finish': 0, 'existing_control_file': int(existing_control_file)},
-                      cls=NumpyJsonEncoder)
+    return json.dumps({'row': row, 'n_row': n_row, 'finish': 0,
+                       'existing_control_file': int(existing_control_file)}, cls=NumpyJsonEncoder)
 
 
-@blueprint.route('/post_row/', methods=['POST'])
-def post_row():
-    """Post a new row in the final dataset"""
+@blueprint.route('/save_row/', methods=['POST'])
+def save_row():
+    """Save a new categorized row in the final dataset"""
     json_data = request.get_json()
     separator = translate_separator(json_data['separator'])
     input_df = pd.read_csv(json_data['input_file'], sep=separator, encoding='utf-8')
     partial_output_file = json_data['output_file'].split('.')[0] + '_partial.csv'
 
+    # Load or create Pandas data-frame
     if os.path.exists(partial_output_file):
         output_df = pd.read_csv(partial_output_file, sep=separator, encoding='utf-8')
         columns = output_df.columns.tolist()
@@ -103,11 +107,13 @@ def post_row():
         columns.append(json_data['class_column'])
         output_df = pd.DataFrame(columns=columns)
 
+    # Add classified row to the data-frame
     row = {column: input_df.iloc[json_data['n_row']][column] for column in input_df.columns.tolist()}
     row[json_data['class_column']] = json_data['selected_class']
     row = pd.DataFrame([row], columns=columns)
     output_df = output_df.append(row)
 
+    # Save results
     if json_data['n_row'] == input_df.shape[0] - 1:
         output_df.to_csv(json_data['output_file'], sep=separator, encoding='utf-8', index=False)
         os.remove(partial_output_file)
@@ -115,4 +121,44 @@ def post_row():
         output_df.to_csv(partial_output_file, sep=separator, encoding='utf-8', index=False)
 
     return Response(status=200)
+
+
+@blueprint.route('/get_previous_row/', methods=['GET'])
+def get_previous_row():
+    """Get previous row undoing the last action"""
+    input_file = remove_spaces(request.args.get('input_file', type=str))
+    separator = translate_separator(remove_spaces(request.args.get('separator', type=str)))
+    columns_to_show = str_to_list(remove_spaces(request.args.get('columns_to_show', type=str)))
+    help_column = remove_spaces(request.args.get('help_column', type=str))
+    output_file = remove_spaces(request.args.get('output_file', type=str))
+    class_column = remove_spaces(request.args.get('class_column', type=str))
+    n_row = request.args.get('n_row', type=int)
+
+    if n_row >= 0:
+        input_df = pd.read_csv(input_file, sep=separator, encoding='utf-8')
+        input_row = input_df.iloc[n_row]
+        partial_output_file = output_file.split('.')[0] + '_partial.csv'
+        if os.path.exists(partial_output_file):
+            output_df = pd.read_csv(partial_output_file, sep=separator, encoding='utf-8')
+
+            # If the last row is in the output data-frame it has to be removed (the row didn't be ignored)
+            aux_output_df = output_df.copy()
+            aux_output_df.drop(class_column, axis=1, inplace=True)
+            output_row = aux_output_df.iloc[aux_output_df.shape[0] - 1]
+            if list_is_true(list(input_row == output_row)):
+                output_df = output_df.drop(aux_output_df.shape[0] - 1)
+            if output_df.shape[0] == 0:
+                os.remove(partial_output_file)
+            else:
+                output_df.to_csv(partial_output_file, sep=separator, encoding='utf-8', index=False)
+
+        # Get required row information
+        row = {column: input_row[column] for column in columns_to_show}
+        if help_column in input_df.columns:
+            row[help_column] = input_row[help_column]
+        return json.dumps({'row': row, 'n_row': n_row}, cls=NumpyJsonEncoder)
+
+    else:
+        return json.dumps({'errors': ['Row 0 doesn\'t have previous']}, cls=NumpyJsonEncoder)
+
 

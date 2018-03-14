@@ -29,7 +29,7 @@ const utils = {
             text,
             layout: 'topRight',
             theme: 'sunset',
-            timeout: 30000,
+            timeout: 15000,
         }).show();
     },
 

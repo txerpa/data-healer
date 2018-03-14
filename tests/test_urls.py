@@ -103,7 +103,7 @@ class ViewTests(unittest.TestCase):
         data = json.loads(response.data.decode('utf-8'))
         self.assertTrue('errors' in data)
 
-    def test_post_row(self):
+    def test_save_row(self):
         data = {
             'input_file': self.input_file,
             'separator': self.separator,
@@ -113,11 +113,11 @@ class ViewTests(unittest.TestCase):
             'selected_class': 'A',
         }
         self.assertFalse(os.path.exists('output_test_partial.csv'))
-        response = self.app.post('/post_row/', data=json.dumps(data), content_type='application/json')
+        response = self.app.post('/save_row/', data=json.dumps(data), content_type='application/json')
         self.assertNotEqual(response.status_code, 404)
         self.assertTrue(os.path.exists('output_test_partial.csv'))
 
-    def test_post_last_row(self):
+    def test_save_last_row(self):
         data = {
             'input_file': self.input_file,
             'separator': self.separator,
@@ -127,8 +127,32 @@ class ViewTests(unittest.TestCase):
             'selected_class': 'A',
         }
         self.assertFalse(os.path.exists('output_test.csv'))
-        self.app.post('/post_row/', data=json.dumps(data), content_type='application/json')
+        self.app.post('/save_row/', data=json.dumps(data), content_type='application/json')
         data['n_row'] = 1
-        response = self.app.post('/post_row/', data=json.dumps(data), content_type='application/json')
+        response = self.app.post('/save_row/', data=json.dumps(data), content_type='application/json')
         self.assertNotEqual(response.status_code, 404)
         self.assertTrue(os.path.exists('output_test.csv'))
+
+    def test_get_previous_row_saved(self):
+        self.test_save_row()
+        df = pd.read_csv('output_test_partial.csv', sep=';', encoding='utf-8')
+        self.assertEqual(df.shape[0], 1)
+        response = self.app.get('/get_previous_row/?input_file={}&separator={}&columns_to_show={}'
+                                '&help_column={}&output_file={}&class_column={}&n_row={}' \
+                                .format(self.input_file, self.separator, self.columns_to_show,
+                                        self.help_column, self.output_file, self.class_column, 0))
+        self.assertNotEqual(response.status_code, 404)
+        self.assertFalse(os.path.exists('output_test_partial.csv'))
+
+    def test_get_previous_row_ignored(self):
+        self.test_save_row()
+        df = pd.read_csv('output_test_partial.csv', sep=';', encoding='utf-8')
+        self.assertEqual(df.shape[0], 1)
+        response = self.app.get('/get_previous_row/?input_file={}&separator={}&columns_to_show={}'
+                                '&help_column={}&output_file={}&class_column={}&n_row={}' \
+                                .format(self.input_file, self.separator, self.columns_to_show,
+                                        self.help_column, self.output_file, self.class_column, 1))
+        self.assertNotEqual(response.status_code, 404)
+        self.assertTrue(os.path.exists('output_test_partial.csv'))
+        df = pd.read_csv('output_test_partial.csv', sep=';', encoding='utf-8')
+        self.assertEqual(df.shape[0], 1)

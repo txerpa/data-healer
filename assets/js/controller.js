@@ -1,8 +1,8 @@
 /* eslint-disable camelcase,no-trailing-spaces,no-undef,no-prototype-builtins,no-restricted-syntax,no-plusplus,no-unused-vars,guard-for-in,no-const-assign */
 
 /*
-    Data-healer controller
-*/
+ * Data-healer controller
+ */
 
 const controller = new Vue({
 
@@ -40,7 +40,8 @@ const controller = new Vue({
     methods: {
 
         /**
-         * Function that checks the configurations set by the user
+         * Function that makes an AJAX request
+         * for check the configurations set by the user
          */
         start() {
             const data = {
@@ -73,7 +74,8 @@ const controller = new Vue({
         },
 
         /**
-         * Function that makes an AJAX request to the server to obtain the next row of the dataset
+         * Function that makes an AJAX request to
+         * obtain the n specified row of the dataset
          */
         getRow() {
             const url = `/get_row/?input_file=${this.input_file}&separator=${this.separator}
@@ -99,9 +101,10 @@ const controller = new Vue({
         },
 
         /**
-         * Function that posts a new row in the result dataset
+         * Function that makes an AJAX request to save a new
+         * categorized row in the result dataset
          */
-        postRow(event) {
+        saveRow(event) {
             const data = {
                 input_file: this.input_file,
                 separator: this.separator,
@@ -110,8 +113,8 @@ const controller = new Vue({
                 n_row: this.n_row,
                 selected_class: $(event.target).text().trim(),
             };
-            this.$http.post('/post_row/', data).then(() => {
-                this.nextRow();
+            this.$http.post('/save_row/', data).then(() => {
+                this.getNextRow();
             }, (response) => {
                 utils.showNoty(response.body, 'error');
             });
@@ -120,9 +123,26 @@ const controller = new Vue({
         /**
          * Function that gets next CSV row
          */
-        nextRow() {
+        getNextRow() {
             this.n_row += 1;
             this.getRow();
+        },
+
+        /**
+         * Function that makes an AJAX request to
+         * recover the last row passed
+         */
+        getPreviousRow() {
+            this.n_row -= 1;
+            const url = `/get_previous_row/?input_file=${this.input_file}&separator=${this.separator}
+            &columns_to_show=${this.columns_to_show}&help_column=${this.help_column}
+            &output_file=${this.output_file}&class_column=${this.class_column}&n_row=${this.n_row}`;
+            this.$http.get(url).then((response) => {
+                this.row = response.body.row;
+                this.n_row = response.body.n_row;
+            }, (response) => {
+                utils.showNoty(response.body, 'error');
+            });
         },
     },
 });
