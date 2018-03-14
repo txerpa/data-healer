@@ -2,4 +2,6 @@
 
 export FLASK_APP=healer_app.py
 export FLASK_DEBUG=0
+export NODE_ENV=production
+
 flask run

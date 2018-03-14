@@ -18,7 +18,7 @@ With this purpose we have developed **data-healer**. A simple web application th
 a fast and friendly interface. You just have to define some configs and give it a CSV input and start to categorize.
 Each new categorization is registered in a new CSV with the same shape as the input one and an extra category column.
 
-Finally, if you have tried first to infer the category with an unsupervised learning algorithm you can specify this
+Finally, if you have tried first to infer classes with an unsupervised learning algorithm you can specify this
 inferred column as a default option to speed up the category selection process.
 
 

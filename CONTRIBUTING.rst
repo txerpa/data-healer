@@ -81,14 +81,18 @@ In general, before running shell commands, set the ``FLASK_APP`` and
     export FLASK_APP=healer_app.py
     export FLASK_DEBUG=1
 
+To run all tests, run ::
+
+    flask test
+
 Install npm dependencies::
 
     npm install
     npm start  # run the webpack dev server and flask server using concurrently
 
-To run all tests, run ::
+Set Node in dev mode::
 
-    flask test
+    export NODE_ENV=development
 
 
 Deployment
