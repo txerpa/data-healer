@@ -6,7 +6,6 @@ The app module, containing the app factory function.
 
 from flask import Flask, render_template
 from flask.helpers import get_debug_flag
-from flask_cors import CORS
 
 from healer import commands, public
 from healer.extensions import bcrypt, cache, webpack
@@ -19,8 +18,6 @@ def create_app(config_object=ProdConfig):
     :param config_object: The configuration object to use.
     """
     app = Flask(__name__.split('.')[0])
-    CORS(app)
-    app.config['CORS_HEADERS'] = 'Content-Type'
     app.config.from_object(config_object)
     register_extensions(app)
     register_blueprints(app)
