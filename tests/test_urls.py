@@ -111,6 +111,7 @@ class ViewTests(unittest.TestCase):
             'class_column': self.class_column,
             'n_row': 0,
             'selected_class': 'A',
+            'row': {}
         }
         self.assertFalse(os.path.exists('output_test_partial.csv'))
         response = self.app.post('/save_row/', data=json.dumps(data), content_type='application/json')
@@ -125,6 +126,7 @@ class ViewTests(unittest.TestCase):
             'class_column': self.class_column,
             'n_row': 0,
             'selected_class': 'A',
+            'row': {}
         }
         self.assertFalse(os.path.exists('output_test.csv'))
         self.app.post('/save_row/', data=json.dumps(data), content_type='application/json')
