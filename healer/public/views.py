@@ -109,6 +109,9 @@ def save_row():
 
     # Add classified row to the data-frame
     row = {column: input_df.iloc[json_data['n_row']][column] for column in input_df.columns.tolist()}
+    # Overwrite user-edited attrs
+    for attr in json_data['row']:
+        row[attr] = json_data['row'][attr]
     row[json_data['class_column']] = json_data['selected_class']
     row = pd.DataFrame([row], columns=columns)
     output_df = output_df.append(row)

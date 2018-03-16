@@ -69,7 +69,10 @@
                 <div class="card-content">
                     <ul class="collection">
                         <li class="collection-item" v-for="(value, key) in row" v-if="key != help_column">
-                            {% raw %}{{ value }}{% endraw %}
+                            <div class="input-field">
+                                <textarea class="materialize-textarea" v-model="row[key]"></textarea>
+                                <label class="active">{% raw %}{{ key }}{% endraw %}</label>
+                            </div>
                         </li>
                     </ul>
                 </div>

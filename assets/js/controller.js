@@ -1,4 +1,4 @@
-/* eslint-disable camelcase,no-trailing-spaces,no-undef,no-prototype-builtins,no-restricted-syntax,no-plusplus,no-unused-vars,guard-for-in,no-const-assign */
+/* eslint-disable camelcase,no-trailing-spaces,no-undef,no-prototype-builtins,no-restricted-syntax,no-plusplus,no-unused-vars,guard-for-in,no-const-assign,radix */
 
 /*
  * Data-healer controller
@@ -23,6 +23,26 @@ const controller = new Vue({
         n_row: 0,
         row: {},
         total_rows: 0,
+    },
+
+    watch: {
+
+        /**
+         * Function called after update row which calculates materialize textarea heights
+         */
+        row() {
+            // nextTick() waits until Vue render process is finished
+            Vue.nextTick(function () {
+                const textareas = $('.materialize-textarea');
+                for (let i = 0, len = textareas.length; i < len; i++) {
+                    const textarea = $(textareas[i]);
+                    const content = textarea.val();
+                    const line_height = parseInt(textarea.css('line-height').split('px')[0]);
+                    const n_rows = 1 + (content.match(/\n/g) || []).length;
+                    textarea.css('height', line_height * n_rows);
+                }
+            });
+        },
     },
 
     computed: {
@@ -111,6 +131,7 @@ const controller = new Vue({
                 output_file: this.output_file,
                 class_column: this.class_column,
                 n_row: this.n_row,
+                row: this.row,
                 selected_class: $(event.target).text().trim(),
             };
             this.$http.post('/save_row/', data).then(() => {
@@ -146,5 +167,6 @@ const controller = new Vue({
         },
     },
 });
+
 
 window.controller = controller;
