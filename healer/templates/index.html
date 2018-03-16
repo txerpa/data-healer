@@ -89,16 +89,16 @@
 
         <div class="col s12 m4 l3">
             <h4 class="white-text thin">Classes</h4>
-            <div class="row" v-for="c in classes">
+            <div class="row" v-for="cl in classes">
                 <div class="col s12 center">
                      <button id="default-class-button"
                              class="waves-effect waves-light btn-large orange accent-4 class-button"
-                             v-if="c == row[help_column]" v-on:click="saveRow($event)">
-                        {% raw %}{{ c }}{% endraw %}
+                             v-if="cl == row[help_column]" v-on:click="saveRow($event)">
+                        {% raw %}{{ cl }}{% endraw %}
                      </button>
                      <button class="waves-effect waves-light btn-large orange accent-2 class-button"
-                             v-if="c != row[help_column]" v-on:click="saveRow($event)">
-                        {% raw %}{{ c }}{% endraw %}
+                             v-if="cl != row[help_column]" v-on:click="saveRow($event)">
+                        {% raw %}{{ cl }}{% endraw %}
                      </button>
                 </div>
             </div>

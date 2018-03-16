@@ -28,11 +28,11 @@ textarea {
 /* footer */
 
 footer {
-    margin-top: 45px;
+    margin-top: 8%;
     padding-top: 5px;
     border-top: 1px solid #eaeaea;
     color: #eaeaea;
-    position: absolute;
+    position: relative;
     right: 0;
     bottom: 0;
     left: 0;

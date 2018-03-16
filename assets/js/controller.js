@@ -32,13 +32,13 @@ const controller = new Vue({
          */
         row() {
             // nextTick() waits until Vue render process is finished
-            Vue.nextTick(function () {
+            Vue.nextTick(() => {
                 const textareas = $('.materialize-textarea');
                 for (let i = 0, len = textareas.length; i < len; i++) {
                     const textarea = $(textareas[i]);
                     const content = textarea.val();
                     const line_height = parseInt(textarea.css('line-height').split('px')[0]);
-                    const n_rows = 1 + (content.match(/\n/g) || []).length;
+                    const n_rows = (content.match(/\n/g) || []).length;
                     textarea.css('height', line_height * n_rows);
                 }
             });
@@ -78,6 +78,7 @@ const controller = new Vue({
                     utils.showNoty('Start!', 'success');
                     document.querySelector('#config-card').style.display = 'none';
                     document.querySelector('#progress').style.display = 'block';
+                    document.querySelector('#configuration').style.display = 'block';
                     document.querySelector('#app-card').style.display = 'block';
                     this.classes = response.body.classes;
                     this.total_rows = response.body.total_rows;
@@ -165,6 +166,7 @@ const controller = new Vue({
                 utils.showNoty(response.body, 'error');
             });
         },
+
     },
 });
 

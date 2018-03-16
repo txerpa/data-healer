@@ -10,7 +10,7 @@ import json
 from flask import Blueprint, render_template, request, Response
 import pandas as pd
 
-from ..utils import NumpyJsonEncoder, check_config, list_is_true, str_to_list, translate_separator, remove_spaces
+from ..utils import NumpyJsonEncoder, check_config, list_is_true, str_to_list, translate_separator
 
 blueprint = Blueprint('public', __name__, static_folder='../static')
 
@@ -24,33 +24,43 @@ def index():
 @blueprint.route('/start/', methods=['POST'])
 def start():
     """Funcion tha checks the configurations and get the available classes"""
+
+    # Params preprocessing
     json_data = request.get_json()
-    separator = translate_separator(json_data['separator'])
-    errors = check_config(json_data['input_file'], separator, str_to_list(json_data['columns_to_show']),
-                          json_data['help_column'], json_data['output_file'], json_data['class_column'],
-                          str_to_list(json_data['classes']))
+    input_file = json_data['input_file'].strip(' ')
+    separator = translate_separator(json_data['separator'].strip(' '))
+    columns_to_show = str_to_list(json_data['columns_to_show'])
+    help_column =  json_data['help_column'].strip(' ')
+    output_file = json_data['output_file'].strip(' ')
+    class_column = json_data['class_column'].strip(' ')
+    classes = str_to_list(json_data['classes'])
+
+    errors = check_config(input_file, separator, columns_to_show, help_column, output_file, class_column, classes)
+
     if len(errors) > 0:
         return json.dumps({'errors': errors}, cls=NumpyJsonEncoder)
     else:
-        input_df = pd.read_csv(json_data['input_file'], sep=separator, encoding='utf-8')
+        input_df = pd.read_csv(input_file, sep=separator, encoding='utf-8')
         total_rows = input_df.shape[0]
 
-        if json_data['help_column'] != '':
-            classes = list(input_df[json_data['help_column']].unique())
+        if help_column != '':
+            classes = list(input_df[help_column].unique())
         else:
-            classes = str_to_list(json_data['classes'])
+            classes = str_to_list(classes)
         return json.dumps({'classes': classes, 'total_rows': total_rows}, cls=NumpyJsonEncoder)
 
 
 @blueprint.route('/get_row/', methods=['GET'])
 def get_row():
     """Get the n specified of the dataset"""
-    input_file = remove_spaces(request.args.get('input_file', type=str))
-    separator = translate_separator(remove_spaces(request.args.get('separator', type=str)))
-    columns_to_show = str_to_list(remove_spaces(request.args.get('columns_to_show', type=str)))
-    help_column = remove_spaces(request.args.get('help_column', type=str))
-    output_file = remove_spaces(request.args.get('output_file', type=str))
-    class_column = remove_spaces(request.args.get('class_column', type=str))
+
+    # Params preprocessing
+    input_file = request.args.get('input_file', type=str).strip(' ')
+    separator = translate_separator(request.args.get('separator', type=str).strip(' '))
+    columns_to_show = str_to_list(request.args.get('columns_to_show', type=str))
+    help_column = request.args.get('help_column', type=str).strip(' ')
+    output_file = request.args.get('output_file', type=str).strip(' ')
+    class_column = request.args.get('class_column', type=str).strip(' ')
     n_row = request.args.get('n_row', type=int)
 
     input_df = pd.read_csv(input_file, sep=separator, encoding='utf-8')
@@ -93,10 +103,18 @@ def get_row():
 @blueprint.route('/save_row/', methods=['POST'])
 def save_row():
     """Save a new categorized row in the final dataset"""
+
+    # Params preprocessing
     json_data = request.get_json()
-    separator = translate_separator(json_data['separator'])
-    input_df = pd.read_csv(json_data['input_file'], sep=separator, encoding='utf-8')
-    partial_output_file = json_data['output_file'].split('.')[0] + '_partial.csv'
+    input_file = request.args.get('input_file', type=str).strip(' ')
+    separator = translate_separator(request.args.get('separator', type=str).strip(' '))
+    output_file = request.args.get('output_file', type=str).strip(' ')
+    class_column = request.args.get('class_column', type=str).strip(' ')
+    n_row = request.args.get('n_row', type=int)
+    selected_class = request.args.get('selected_class', type=str).strip(' ')
+
+    input_df = pd.read_csv(input_file, sep=separator, encoding='utf-8')
+    partial_output_file = output_file.split('.')[0] + '_partial.csv'
 
     # Load or create Pandas data-frame
     if os.path.exists(partial_output_file):
@@ -104,21 +122,21 @@ def save_row():
         columns = output_df.columns.tolist()
     else:
         columns = input_df.columns.tolist()
-        columns.append(json_data['class_column'])
+        columns.append(class_column)
         output_df = pd.DataFrame(columns=columns)
 
     # Add classified row to the data-frame
-    row = {column: input_df.iloc[json_data['n_row']][column] for column in input_df.columns.tolist()}
+    row = {column: input_df.iloc[n_row][column] for column in input_df.columns.tolist()}
     # Overwrite user-edited attrs
     for attr in json_data['row']:
         row[attr] = json_data['row'][attr]
-    row[json_data['class_column']] = json_data['selected_class']
+    row[class_column] = selected_class
     row = pd.DataFrame([row], columns=columns)
     output_df = output_df.append(row)
 
     # Save results
-    if json_data['n_row'] == input_df.shape[0] - 1:
-        output_df.to_csv(json_data['output_file'], sep=separator, encoding='utf-8', index=False)
+    if n_row == input_df.shape[0] - 1:
+        output_df.to_csv(output_file, sep=separator, encoding='utf-8', index=False)
         os.remove(partial_output_file)
     else:
         output_df.to_csv(partial_output_file, sep=separator, encoding='utf-8', index=False)
@@ -129,12 +147,14 @@ def save_row():
 @blueprint.route('/get_previous_row/', methods=['GET'])
 def get_previous_row():
     """Get previous row undoing the last action"""
-    input_file = remove_spaces(request.args.get('input_file', type=str))
-    separator = translate_separator(remove_spaces(request.args.get('separator', type=str)))
-    columns_to_show = str_to_list(remove_spaces(request.args.get('columns_to_show', type=str)))
-    help_column = remove_spaces(request.args.get('help_column', type=str))
-    output_file = remove_spaces(request.args.get('output_file', type=str))
-    class_column = remove_spaces(request.args.get('class_column', type=str))
+
+    # Params preprocessing
+    input_file = request.args.get('input_file', type=str).strip(' ')
+    separator = translate_separator(request.args.get('separator', type=str).strip(' '))
+    columns_to_show = str_to_list(request.args.get('columns_to_show', type=str))
+    help_column = request.args.get('help_column', type=str).strip(' ')
+    output_file = request.args.get('output_file', type=str).strip(' ')
+    class_column = request.args.get('class_column', type=str).strip(' ')
     n_row = request.args.get('n_row', type=int)
 
     if n_row >= 0:

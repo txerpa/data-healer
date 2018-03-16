@@ -7,7 +7,7 @@ A flasky app to categorize unlabeled datasets.
 Why?
 ----
 
-In machine learning world, sometimes you need to categorize an unlabeled dataset. Probably yo have obtained
+In machine learning world, sometimes you need to categorize an unlabeled dataset. Probably you have obtained
 data from a third party and in most cases the dataset is big and you try to categorize it using an unsupervised
 learning algorithm such as [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation),
 [KMeans](https://en.wikipedia.org/wiki/K-means_clustering), ...

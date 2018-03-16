@@ -1,10 +1,16 @@
 <header>
     <div class="row">
-        <div class="col l6 m6 s12">
+        <div class="col l4 m4 s12">
             <h1 class="white-text thin">Data healer</h1>
         </div>
-        <div id="progress" class="col l6 m6 s12" style="display: none">
+        <div id="progress" class="col l4 m4 s12" style="display: none">
             <h4 class="white-text thin" v-text="progress"></h4>
+        </div>
+        <div id="configuration" class="col l4 m4 s12" style="display: none">
+            <div class="row white-text thin" style="padding-top: 3%">
+                <strong>Input file:</strong> <span v-text="input_file"></span><br>
+                <strong>Output file:</strong> <span v-text="output_file"></span><br>
+            </div>
         </div>
     </div>
 </header>

@@ -40,6 +40,7 @@ def check_config(input_file, separator, columns_to_show, help_column, output_fil
     :param classes: List of available classes
     :return errors: {list}
     """
+
     errors = []
     if not os.path.exists(input_file):
         errors.append('Input file doesn\'t exist.')
@@ -101,8 +102,8 @@ def str_to_list(str_list):
     Function that casts an string with comma separated classes in a list of string
     :return: {list}
     """
-    str_list = str_list.replace(' ', '')
-    return str_list.split(',')
+    slices = str_list.split(',')
+    return [slice.strip(' ') for slice in slices]
 
 
 def translate_separator(separator):
@@ -115,12 +116,3 @@ def translate_separator(separator):
         return ';'
     elif separator == 'coma':
         return ','
-
-
-def remove_spaces(str):
-    """
-    Funtion that remove all kind of spaces of a string
-    :param str: {str}
-    :return: {str}
-    """
-    return re.sub(r'\s+', '', str)
