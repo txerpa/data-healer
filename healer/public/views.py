@@ -27,12 +27,12 @@ def start():
 
     # Params preprocessing
     json_data = request.get_json()
-    input_file = json_data['input_file'].strip(' ')
-    separator = translate_separator(json_data['separator'].strip(' '))
+    input_file = json_data['input_file'].strip()
+    separator = translate_separator(json_data['separator'].strip())
     columns_to_show = str_to_list(json_data['columns_to_show'])
-    help_column =  json_data['help_column'].strip(' ')
-    output_file = json_data['output_file'].strip(' ')
-    class_column = json_data['class_column'].strip(' ')
+    help_column = json_data['help_column'].strip()
+    output_file = json_data['output_file'].strip()
+    class_column = json_data['class_column'].strip()
     classes = str_to_list(json_data['classes'])
 
     errors = check_config(input_file, separator, columns_to_show, help_column, output_file, class_column, classes)
@@ -55,12 +55,12 @@ def get_row():
     """Get the n specified of the dataset"""
 
     # Params preprocessing
-    input_file = request.args.get('input_file', type=str).strip(' ')
-    separator = translate_separator(request.args.get('separator', type=str).strip(' '))
+    input_file = request.args.get('input_file', type=str).strip()
+    separator = translate_separator(request.args.get('separator', type=str).strip())
     columns_to_show = str_to_list(request.args.get('columns_to_show', type=str))
-    help_column = request.args.get('help_column', type=str).strip(' ')
-    output_file = request.args.get('output_file', type=str).strip(' ')
-    class_column = request.args.get('class_column', type=str).strip(' ')
+    help_column = request.args.get('help_column', type=str).strip()
+    output_file = request.args.get('output_file', type=str).strip()
+    class_column = request.args.get('class_column', type=str).strip()
     n_row = request.args.get('n_row', type=int)
 
     input_df = pd.read_csv(input_file, sep=separator, encoding='utf-8')
@@ -106,12 +106,12 @@ def save_row():
 
     # Params preprocessing
     json_data = request.get_json()
-    input_file = request.args.get('input_file', type=str).strip(' ')
-    separator = translate_separator(request.args.get('separator', type=str).strip(' '))
-    output_file = request.args.get('output_file', type=str).strip(' ')
-    class_column = request.args.get('class_column', type=str).strip(' ')
-    n_row = request.args.get('n_row', type=int)
-    selected_class = request.args.get('selected_class', type=str).strip(' ')
+    input_file = json_data['input_file'].strip()
+    separator = translate_separator(json_data['separator'].strip())
+    output_file = json_data['output_file'].strip()
+    class_column = json_data['class_column'].strip()
+    n_row = int(json_data['n_row'])
+    selected_class = json_data['selected_class'].strip()
 
     input_df = pd.read_csv(input_file, sep=separator, encoding='utf-8')
     partial_output_file = output_file.split('.')[0] + '_partial.csv'
@@ -149,12 +149,12 @@ def get_previous_row():
     """Get previous row undoing the last action"""
 
     # Params preprocessing
-    input_file = request.args.get('input_file', type=str).strip(' ')
-    separator = translate_separator(request.args.get('separator', type=str).strip(' '))
+    input_file = request.args.get('input_file', type=str).strip()
+    separator = translate_separator(request.args.get('separator', type=str).strip())
     columns_to_show = str_to_list(request.args.get('columns_to_show', type=str))
-    help_column = request.args.get('help_column', type=str).strip(' ')
-    output_file = request.args.get('output_file', type=str).strip(' ')
-    class_column = request.args.get('class_column', type=str).strip(' ')
+    help_column = request.args.get('help_column', type=str).strip()
+    output_file = request.args.get('output_file', type=str).strip()
+    class_column = request.args.get('class_column', type=str).strip()
     n_row = request.args.get('n_row', type=int)
 
     if n_row >= 0:
