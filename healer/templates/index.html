@@ -9,11 +9,12 @@
                     <span class="card-title">Configuration</span>
                     <div class="row" style="margin-top: 3%">
                         <div class="input-field col s12 m6 l8">
-                            <input placeholder="/path/to/input.csv" type="text" class="validate" v-model="input_file">
+                            <input placeholder="/path/to/input.csv" type="text"
+                                   class="validate" v-model="input_file" required>
                             <label for="input file">CSV input file</label>
                         </div>
                         <div class="col s12 m6 l4" style="padding-top: 1.5%; padding-left: 5%">
-                            <input name="separator-group" type="radio" id="semicolon" checked
+                            <input name="separator-group" type="radio" id="semicolon"
                                    v-model="separator" value="semicolon"/>
                             <label  for="semicolon"><strong>;</strong> column separator</label>
                             <input name="separator-group" type="radio"  id="coma"
@@ -24,34 +25,31 @@
                     <div class="row">
                         <div class="input-field col s12 m6 l8">
                             <input placeholder="Column names , separated" type="text"
-                                   class="validate" v-model="columns_to_show">
+                                   class="validate" v-model="columns_to_show" required>
                             <label for="columns to show">Columns to show</label>
                         </div>
                         <div class="input-field col s12 m6 l4">
-                            <input placeholder="Help column name" type="text" class="validate" v-model="help_column">
-                            <label for="help column">Help column</label>
+                            <input placeholder="Default column name" type="text" class="validate" v-model="default_column">
+                            <label for="default column">Default column</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s12 m6 l8">
-                            <input placeholder="/path/to/output.csv" type="text" class="validate" v-model="output_file">
+                            <input placeholder="/path/to/output.csv" type="text"
+                                   class="validate" v-model="output_file" required>
                             <label for="output file">CSV output file</label>
                         </div>
                         <div class="input-field col s12 m6 l4">
-                            <input placeholder="Class column name" type="text" class="validate" v-model="class_column">
+                            <input placeholder="Class column name" type="text"
+                                   class="validate" v-model="class_column" required>
                             <label for="class column">Class column</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input_field col s12 m12 l12">
-                            <input placeholder="Coma separated classes" type="text" class="validate" v-model="classes">
+                            <input placeholder="Coma separated classes" type="text"
+                                   class="validate" v-model="classes" required>
                             <label for="classes">Classes</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s12 m12 l12">
-                            Pressing <strong>enter</strong> you are selecting the default option (help column). <br>
-                            If you don't have a help column you must to define the classes manually.
                         </div>
                     </div>
                 </div>
@@ -68,7 +66,7 @@
             <div class="card">
                 <div class="card-content">
                     <ul class="collection">
-                        <li class="collection-item" v-for="(value, key) in row" v-if="key != help_column">
+                        <li class="collection-item" v-for="(value, key) in row" v-if="key != default_column">
                             <div class="input-field">
                                 <textarea class="materialize-textarea" v-model="row[key]"></textarea>
                                 <label class="active">{% raw %}{{ key }}{% endraw %}</label>
@@ -80,9 +78,13 @@
                    title="Get last row" v-on:click="getPreviousRow()" v-if="n_row > 0" style="left: 2%">
                     <i class="fa fa-arrow-left"></i>
                 </a>
-                <a class="btn-floating btn-large halfway-fab waves-effect waves-light red"
+                <a class="btn-floating btn-large halfway-fab waves-effect waves-light red" style="margin-right: 6%"
                    title="Discard row" v-on:click="getNextRow()">
                     <i class="fa fa-thumbs-down"></i>
+                </a>
+                 <a class="btn-floating btn-large halfway-fab waves-effect waves-light green modal-trigger"
+                   title="Add new class" href="#modal-new-class">
+                    <i class="fa fa-plus"></i>
                 </a>
             </div>
         </div>
@@ -93,11 +95,11 @@
                 <div class="col s12 center">
                      <button id="default-class-button"
                              class="waves-effect waves-light btn-large orange accent-4 class-button"
-                             v-if="cl == row[help_column]" v-on:click="saveRow($event)">
+                             v-if="cl == row[default_column]" v-on:click="saveRow($event)">
                         {% raw %}{{ cl }}{% endraw %}
                      </button>
                      <button class="waves-effect waves-light btn-large orange accent-2 class-button"
-                             v-if="cl != row[help_column]" v-on:click="saveRow($event)">
+                             v-if="cl != row[default_column]" v-on:click="saveRow($event)">
                         {% raw %}{{ cl }}{% endraw %}
                      </button>
                 </div>
@@ -114,6 +116,21 @@
                     It has the column <strong>{% raw %}{{ class_column }}{% endraw %}</strong> with your selections.
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="modal-new-class" class="modal bottom-sheet">
+        <div class="modal-content">
+            <div class="row">
+                <div class="input-field col s12 m12 l12">
+                    <input placeholder="classname" type="text" class="validate" v-model="new_class">
+                    <label for="output file">New class name</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="waves-effect waves-green btn-flat" v-on:click="addClass()">Add class</a>
         </div>
     </div>
 

@@ -33,26 +33,6 @@ const utils = {
         }).show();
     },
 
-    keyDownHandler(event) {
-        if (event.keyCode === 13) {
-            document.querySelector('#default-class-button').click();
-        }
-    },
-
-    /**
-     * Function that creates an enter listener
-     */
-    addEnterListerner() {
-        document.addEventListener('keydown', this.keyDownHandler);
-    },
-
-    /**
-     * Function that removes the enter listener
-     */
-    removeEnterListener() {
-        document.removeEventListener('keydown', this.keyDownHandler);
-    },
-
 };
 
 window.utils = utils;

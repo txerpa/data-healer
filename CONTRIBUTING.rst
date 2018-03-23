@@ -60,7 +60,10 @@ Ready to contribute? Here's how to set up `data-healer` for local development.
 Operating system requirements:
 
     * Python
-    * `Node <https://nodejs.org/es//>`_
+    * `Node <https://nodejs.org/es//>`_::
+
+        sudo apt-get install nodejs-legacy
+        sudo apt-get install npm
 
 First, set your app's secret key as an environment variable. For example,
 add the following to ``.bashrc`` or ``.bash_profile``.
@@ -85,14 +88,14 @@ To run all tests, run ::
 
     flask test
 
+Set Node in dev mode::
+
+    export NODE_ENV=development
+
 Install npm dependencies::
 
     npm install
     npm start  # run the webpack dev server and flask server using concurrently
-
-Set Node in dev mode::
-
-    export NODE_ENV=development
 
 
 Deployment

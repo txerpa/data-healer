@@ -12,9 +12,9 @@ const controller = new Vue({
 
         // Configuration
         input_file: '',
-        separator: '',
+        separator: 'semicolon',
         columns_to_show: '',
-        help_column: '',
+        default_column: '',
         output_file: '',
         class_column: '',
         classes: '',
@@ -23,6 +23,13 @@ const controller = new Vue({
         n_row: 0,
         row: {},
         total_rows: 0,
+
+        // Modal input text value
+        new_class: '',
+    },
+
+    mounted() {
+        $('.modal').modal();
     },
 
     watch: {
@@ -68,7 +75,7 @@ const controller = new Vue({
                 input_file: this.input_file,
                 separator: this.separator,
                 columns_to_show: this.columns_to_show,
-                help_column: this.help_column,
+                default_column: this.default_column,
                 output_file: this.output_file,
                 class_column: this.class_column,
                 classes: this.classes,
@@ -83,7 +90,6 @@ const controller = new Vue({
                     this.classes = response.body.classes;
                     this.total_rows = response.body.total_rows;
                     this.getRow();
-                    utils.addEnterListerner();
                 } else {
                     for (let i = 0; i < response.body.errors.length; i++) {
                         utils.showNoty(response.body.errors[i], 'error');
@@ -100,14 +106,13 @@ const controller = new Vue({
          */
         getRow() {
             const url = `/get_row/?input_file=${this.input_file}&separator=${this.separator}
-            &columns_to_show=${this.columns_to_show}&help_column=${this.help_column}
+            &columns_to_show=${this.columns_to_show}&default_column=${this.default_column}
             &output_file=${this.output_file}&class_column=${this.class_column}&n_row=${this.n_row}`;
             this.$http.get(url).then((response) => {
                 if (response.body.finish === 1) {
                     utils.showNoty('Finish!', 'success');
                     document.querySelector('#app-card').style.display = 'none';
                     document.querySelector('#finish-card').style.display = 'block';
-                    utils.removeEnterListener();
                 } else {
                     if (response.body.existing_control_file === 1) {
                         utils.showNoty('There is a control file saved, you will continue with it. \n' +
@@ -157,7 +162,7 @@ const controller = new Vue({
         getPreviousRow() {
             this.n_row -= 1;
             const url = `/get_previous_row/?input_file=${this.input_file}&separator=${this.separator}
-            &columns_to_show=${this.columns_to_show}&help_column=${this.help_column}
+            &columns_to_show=${this.columns_to_show}&default_column=${this.default_column}
             &output_file=${this.output_file}&class_column=${this.class_column}&n_row=${this.n_row}`;
             this.$http.get(url).then((response) => {
                 this.row = response.body.row;
@@ -165,6 +170,19 @@ const controller = new Vue({
             }, (response) => {
                 utils.showNoty(response.body, 'error');
             });
+        },
+
+        /**
+         * Function that adds the specified new class to the classes array
+         */
+        addClass() {
+            if (this.classes.indexOf(this.new_class) >= 0) {
+                utils.showNoty('This class already exists', 'error');
+            } else {
+                this.classes.push(this.new_class);
+                $('#modal-new-class').modal('close');
+            }
+            this.new_class = '';
         },
 
     },

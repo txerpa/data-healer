@@ -24,7 +24,7 @@ class ViewTests(unittest.TestCase):
         self.separator = 'semicolon'
         self.input_file = 'input_test.csv'
         self.columns_to_show = 'col1'
-        self.help_column = ''
+        self.default_column = ''
         self.classes = 'A, B, C'
         self.output_file = 'output_test.csv'
         self.class_column = 'classes'
@@ -46,7 +46,7 @@ class ViewTests(unittest.TestCase):
             'input_file': self.input_file,
             'separator': self.separator,
             'columns_to_show': self.columns_to_show,
-            'help_column': self.help_column,
+            'default_column': self.default_column,
             'output_file': self.output_file,
             'class_column': self.class_column,
             'classes': self.classes,
@@ -62,7 +62,7 @@ class ViewTests(unittest.TestCase):
             'input_file': 'bad_input.csv',
             'separator': '',
             'columns_to_show': 'D',
-            'help_column': 'D',
+            'default_column': 'D',
             'output_file': 'bad_output.csv',
             'class_column': 'C',
             'classes': '',
@@ -76,9 +76,9 @@ class ViewTests(unittest.TestCase):
 
     def test_get_row(self):
         response = self.app.get('/get_row/?input_file={}&separator={}&columns_to_show={}'
-                                '&help_column={}&output_file={}&class_column={}&n_row={}' \
+                                '&default_column={}&output_file={}&class_column={}&n_row={}' \
                                 .format(self.input_file, self.separator, self.columns_to_show,
-                                        self.help_column, self.output_file, self.class_column, 0))
+                                        self.default_column, self.output_file, self.class_column, 0))
         self.assertNotEqual(response.status_code, 404)
         data = json.loads(response.data.decode('utf-8'))
         self.assertEqual(data['finish'], 0)
@@ -86,9 +86,9 @@ class ViewTests(unittest.TestCase):
 
     def test_get_last_row(self):
         response = self.app.get('/get_row/?input_file={}&separator={}&columns_to_show={}'
-                                '&help_column={}&output_file={}&class_column={}&n_row={}' \
+                                '&default_column={}&output_file={}&class_column={}&n_row={}' \
                                 .format(self.input_file, self.separator, self.columns_to_show,
-                                        self.help_column, self.output_file, self.class_column, 2))
+                                        self.default_column, self.output_file, self.class_column, 2))
         self.assertNotEqual(response.status_code, 404)
         data = json.loads(response.data.decode('utf-8'))
         self.assertEqual(data['finish'], 1)
@@ -96,9 +96,9 @@ class ViewTests(unittest.TestCase):
 
     def test_get_error_row(self):
         response = self.app.get('/get_row/?input_file={}&separator={}&columns_to_show={}'
-                                '&help_column={}&output_file={}&class_column={}&n_row={}' \
+                                '&default_column={}&output_file={}&class_column={}&n_row={}' \
                                 .format(self.input_file, self.separator, self.columns_to_show,
-                                        self.help_column, self.output_file, self.class_column, 3))
+                                        self.default_column, self.output_file, self.class_column, 3))
         self.assertNotEqual(response.status_code, 404)
         data = json.loads(response.data.decode('utf-8'))
         self.assertTrue('errors' in data)
@@ -140,9 +140,9 @@ class ViewTests(unittest.TestCase):
         df = pd.read_csv('output_test_partial.csv', sep=';', encoding='utf-8')
         self.assertEqual(df.shape[0], 1)
         response = self.app.get('/get_previous_row/?input_file={}&separator={}&columns_to_show={}'
-                                '&help_column={}&output_file={}&class_column={}&n_row={}' \
+                                '&default_column={}&output_file={}&class_column={}&n_row={}' \
                                 .format(self.input_file, self.separator, self.columns_to_show,
-                                        self.help_column, self.output_file, self.class_column, 0))
+                                        self.default_column, self.output_file, self.class_column, 0))
         self.assertNotEqual(response.status_code, 404)
         self.assertFalse(os.path.exists('output_test_partial.csv'))
 
@@ -151,9 +151,9 @@ class ViewTests(unittest.TestCase):
         df = pd.read_csv('output_test_partial.csv', sep=';', encoding='utf-8')
         self.assertEqual(df.shape[0], 1)
         response = self.app.get('/get_previous_row/?input_file={}&separator={}&columns_to_show={}'
-                                '&help_column={}&output_file={}&class_column={}&n_row={}' \
+                                '&default_column={}&output_file={}&class_column={}&n_row={}' \
                                 .format(self.input_file, self.separator, self.columns_to_show,
-                                        self.help_column, self.output_file, self.class_column, 1))
+                                        self.default_column, self.output_file, self.class_column, 1))
         self.assertNotEqual(response.status_code, 404)
         self.assertTrue(os.path.exists('output_test_partial.csv'))
         df = pd.read_csv('output_test_partial.csv', sep=';', encoding='utf-8')

@@ -23,30 +23,25 @@ def index():
 
 @blueprint.route('/start/', methods=['POST'])
 def start():
-    """Funcion tha checks the configurations and get the available classes"""
+    """Funcion that checks the configurations and get the available classes"""
 
     # Params preprocessing
     json_data = request.get_json()
     input_file = json_data['input_file'].strip()
     separator = translate_separator(json_data['separator'].strip())
     columns_to_show = str_to_list(json_data['columns_to_show'])
-    help_column = json_data['help_column'].strip()
+    default_column = json_data['default_column'].strip()
     output_file = json_data['output_file'].strip()
     class_column = json_data['class_column'].strip()
     classes = str_to_list(json_data['classes'])
 
-    errors = check_config(input_file, separator, columns_to_show, help_column, output_file, class_column, classes)
+    errors = check_config(input_file, separator, columns_to_show, default_column, output_file, class_column, classes)
 
     if len(errors) > 0:
         return json.dumps({'errors': errors}, cls=NumpyJsonEncoder)
     else:
         input_df = pd.read_csv(input_file, sep=separator, encoding='utf-8')
         total_rows = input_df.shape[0]
-
-        if help_column != '':
-            classes = list(input_df[help_column].unique())
-        else:
-            classes = str_to_list(classes)
         return json.dumps({'classes': classes, 'total_rows': total_rows}, cls=NumpyJsonEncoder)
 
 
@@ -58,7 +53,7 @@ def get_row():
     input_file = request.args.get('input_file', type=str).strip()
     separator = translate_separator(request.args.get('separator', type=str).strip())
     columns_to_show = str_to_list(request.args.get('columns_to_show', type=str))
-    help_column = request.args.get('help_column', type=str).strip()
+    default_column = request.args.get('default_column', type=str).strip()
     output_file = request.args.get('output_file', type=str).strip()
     class_column = request.args.get('class_column', type=str).strip()
     n_row = request.args.get('n_row', type=int)
@@ -93,8 +88,8 @@ def get_row():
 
     # Get required row information
     row = {column: input_df.iloc[n_row][column] for column in columns_to_show}
-    if help_column in input_df.columns:
-        row[help_column] = input_df.iloc[n_row][help_column]
+    if default_column in input_df.columns:
+        row[default_column] = input_df.iloc[n_row][default_column]
 
     return json.dumps({'row': row, 'n_row': n_row, 'finish': 0,
                        'existing_control_file': int(existing_control_file)}, cls=NumpyJsonEncoder)
@@ -152,7 +147,7 @@ def get_previous_row():
     input_file = request.args.get('input_file', type=str).strip()
     separator = translate_separator(request.args.get('separator', type=str).strip())
     columns_to_show = str_to_list(request.args.get('columns_to_show', type=str))
-    help_column = request.args.get('help_column', type=str).strip()
+    default_column = request.args.get('default_column', type=str).strip()
     output_file = request.args.get('output_file', type=str).strip()
     class_column = request.args.get('class_column', type=str).strip()
     n_row = request.args.get('n_row', type=int)
@@ -177,8 +172,8 @@ def get_previous_row():
 
         # Get required row information
         row = {column: input_row[column] for column in columns_to_show}
-        if help_column in input_df.columns:
-            row[help_column] = input_row[help_column]
+        if default_column in input_df.columns:
+            row[default_column] = input_row[default_column]
         return json.dumps({'row': row, 'n_row': n_row}, cls=NumpyJsonEncoder)
 
     else:
