@@ -78,6 +78,10 @@
                    title="Get last row" v-on:click="getPreviousRow()" v-if="n_row > 0" style="left: 2%">
                     <i class="fa fa-arrow-left"></i>
                 </a>
+                <a class="btn-floating btn-large halfway-fab waves-effect waves-light blue" style="margin-right: 12%"
+                   title="Mark row as doubt" v-on:click="saveDoubt()">
+                    <i class="fa fa-question"></i>
+                </a>
                 <a class="btn-floating btn-large halfway-fab waves-effect waves-light red" style="margin-right: 6%"
                    title="Discard row" v-on:click="getNextRow()">
                     <i class="fa fa-thumbs-down"></i>

@@ -19,23 +19,23 @@ class ViewTests(unittest.TestCase):
         self.app = app.test_client()
 
         self.df = pd.DataFrame(data={'col1': [1, 2], 'col2': [3, 4]})
-        self.df.to_csv('input_test.csv', sep=';', encoding='utf-8')
+        self.df.to_csv('data/input_test.csv', sep=';', encoding='utf-8')
 
         self.separator = 'semicolon'
-        self.input_file = 'input_test.csv'
+        self.input_file = 'data/input_test.csv'
         self.columns_to_show = ['col1', ]
         self.default_column = 'col2'
         self.classes = 'A, B, C'
-        self.output_file = 'output_test.csv'
+        self.output_file = 'data/output_test.csv'
         self.class_column = 'classes'
 
     def tearDown(self):
-        if os.path.exists('input_test.csv'):
-            os.remove('input_test.csv')
-        if os.path.exists('output_test.csv'):
-            os.remove('output_test.csv')
-        if os.path.exists('output_test_partial.csv'):
-            os.remove('output_test_partial.csv')
+        if os.path.exists('data/input_test.csv'):
+            os.remove('data/input_test.csv')
+        if os.path.exists('data/output_test.csv'):
+            os.remove('data/output_test.csv')
+        if os.path.exists('data/output_test_partial.csv'):
+            os.remove('data/output_test_partial.csv')
 
     def test_config_ok(self):
         errors = check_config(self.input_file, translate_separator(self.separator), self.columns_to_show,
@@ -43,7 +43,7 @@ class ViewTests(unittest.TestCase):
         self.assertTrue(len(errors) == 0)
 
     def test_no_input_file(self):
-        input_file = 'inputt_test.csv'
+        input_file = 'data/inputt_test.csv'
         errors = check_config(input_file, self.separator, self.columns_to_show,
                               self.default_column, self.output_file, self.class_column, self.classes)
         self.assertTrue('Input file doesn\'t exist.' in errors)
@@ -98,33 +98,33 @@ class ViewTests(unittest.TestCase):
         self.assertTrue('You must to specify an output file' in errors)
 
     def test_output_file_exists(self):
-        output_file = 'output_test.csv'
-        self.df.to_csv('output_test.csv', sep=';', encoding='utf-8')
+        output_file = 'data/output_test.csv'
+        self.df.to_csv('data/output_test.csv', sep=';', encoding='utf-8')
         errors = check_config(self.input_file, translate_separator(self.separator), self.columns_to_show,
                               self.default_column, output_file, self.class_column, self.classes)
         self.assertTrue('Looks like exists a finished output file. Drop it if you want to start again.' in errors)
 
     def test_output_path_no_exists(self):
-        output_file = 'data/output_test.csv'
+        output_file = 'hi/output_test.csv'
         errors = check_config(self.input_file, translate_separator(self.separator), self.columns_to_show,
                               self.default_column, output_file, self.class_column, self.classes)
         self.assertTrue('Output path doesn\'t exist' in errors)
 
     def test_input_output_same(self):
-        output_file = 'input_test.csv'
+        output_file = 'data/input_test.csv'
         errors = check_config(self.input_file, translate_separator(self.separator), self.columns_to_show,
                               self.default_column, output_file, self.class_column, self.classes)
         self.assertTrue('Input and output must be different files' in errors)
 
     def test_input_output_not_same(self):
-        output_file = 'output_test.csv'
+        output_file = 'data/output_test.csv'
         errors = check_config(self.input_file, translate_separator(self.separator), self.columns_to_show,
                               self.default_column, output_file, self.class_column, self.classes)
         self.assertFalse('Input and output must be different files' in errors)
 
     def test_control_file_saved(self):
-        output_file = 'output_test.csv'
-        self.df.to_csv('output_test_partial.csv', sep=';', encoding='utf-8')
+        output_file = 'data/output_test.csv'
+        self.df.to_csv('data/output_test_partial.csv', sep=';', encoding='utf-8')
         errors = check_config(self.input_file, translate_separator(self.separator), self.columns_to_show,
                               self.default_column, output_file, self.class_column, self.classes)
         self.assertTrue('Looks like there is a control file saved and'

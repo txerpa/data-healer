@@ -185,6 +185,23 @@ const controller = new Vue({
             this.new_class = '';
         },
 
+        /**
+         * Function that makes an AJAX request to save a row as a doubt
+         */
+        saveDoubt(event) {
+            const data = {
+                input_file: this.input_file,
+                separator: this.separator,
+                output_file: this.output_file,
+                n_row: this.n_row,
+            };
+            this.$http.post('/save_doubt/', data).then(() => {
+                this.getNextRow();
+            }, (response) => {
+                utils.showNoty(response.body, 'error');
+            });
+        },
+
     },
 });
 

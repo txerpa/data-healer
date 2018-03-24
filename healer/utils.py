@@ -70,9 +70,7 @@ def check_config(input_file, separator, columns_to_show, help_column, output_fil
         errors.append('You must to specify an output file')
     if os.path.exists(output_file):
         errors.append('Looks like exists a finished output file. Drop it if you want to start again.')
-    slices = output_file.split('/')
-    slices = slices[0:len(slices)-1]
-    if not os.path.isdir('/' + '/'.join(slices)):
+    if not os.path.isdir(os.path.dirname(output_file)):
         errors.append('Output path doesn\'t exist')
     if input_file == output_file:
         errors.append('Input and output must be different files')
@@ -102,6 +100,8 @@ def str_to_list(str_list):
     Function that casts an string with comma separated classes in a list of string
     :return: {list}
     """
+    if str_list in ['', ' ']:
+        return []
     slices = str_list.split(',')
     return [slice.strip(' ') for slice in slices]
 
@@ -116,3 +116,22 @@ def translate_separator(separator):
         return ';'
     elif separator == 'coma':
         return ','
+
+
+def get_partial_file(output_file):
+    """
+    Function that construct the path to the output_partial path
+    :param output_file: Final output path
+    :return: Partial output path
+    """
+    return 'data/{}'.format(os.path.basename(output_file).split('.')[0] + '_partial.csv')
+
+
+def get_doubts_file(output_file):
+    """
+    Function that construct the path to the output_partial path
+    :param output_file: Final output path
+    :return: Partial output path
+    """
+    slices = output_file.split('/')
+    return 'data/{}'.format(os.path.basename(output_file).split('.')[0] + '_doubts.csv')
