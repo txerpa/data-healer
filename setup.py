@@ -26,7 +26,7 @@ setup(
     packages=['healer'],
     install_requires=requirements(),
     scripts=[
-        'bin/data-healer-run',
+        'healer/bin/data-healer-run',
     ],
     keywords='dataset unlabeled categorize',
     classifiers=[

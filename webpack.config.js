@@ -14,18 +14,18 @@ const debug = (process.env.NODE_ENV !== 'production');
 // Development asset host (webpack dev server)
 const publicHost = debug ? 'http://localhost:2992' : 'http://localhost:5000';
 
-const rootAssetPath = path.join(__dirname, 'assets');
+const rootAssetPath = path.join(__dirname, 'healer', 'assets');
 
 module.exports = {
     // configuration
     context: __dirname,
     entry: {
-        main_js: './assets/js/main',
+        main_js: './healer/assets/js/main',
         main_css: [
             path.join(__dirname, 'node_modules', 'font-awesome', 'css', 'font-awesome.css'),
             path.join(__dirname, 'node_modules', 'materialize-css', 'dist', 'css', 'materialize.css'),
             path.join(__dirname, 'node_modules', 'noty', 'lib', 'noty.css'),
-            path.join(__dirname, 'assets', 'css', 'style.css'),
+            path.join(__dirname, 'healer', 'assets', 'css', 'style.css'),
         ],
     },
     output: {

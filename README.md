@@ -38,5 +38,5 @@ Run data-healer::
 Some screenshots
 ----------------
 
-<p align="center"><img src="https://github.com/txerpa/data-healer/blob/master/assets/img/data-healer-1.png"/></p>
-<p align="center"><img src="https://github.com/txerpa/data-healer/blob/master/assets/img/data-healer-2.png"/></p>
+<p align="center"><img src="https://github.com/txerpa/data-healer/blob/master/healer/assets/img/data-healer-1.png"/></p>
+<p align="center"><img src="https://github.com/txerpa/data-healer/blob/master/healer/assets/img/data-healer-2.png"/></p>
